@@ -14,43 +14,14 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-package org.aegis.test;
-
-import org.aegis.*;
+package org.aegis;
 
 /**
+ * The different states a GameScene can be in
  *
  * @author Rogue <Alice Q>
  */
-public class Program {
+public enum SceneState {
 
-    public static void main(String[] args) {
-        try {
-            Orchestrator o = new Orchestrator();
-            Timekeeper tk = new Timekeeper(o, 3.0f);
-
-            tk.setDaemon(true); //TEMP
-
-            o.add(new TestScene1("Scene 1"));
-            o.add(new TestScene2("Scene 2"));
-
-            tk.start();
-            Thread.sleep(3000);
-
-            o.switchTo("Scene 2");
-            Thread.sleep(2500);
-
-            o.pause();
-            Thread.sleep(2500);
-
-            o.unpause();
-            Thread.sleep(1000);
-
-            o.terminate();
-
-            Thread.sleep(500);
-        } catch (Exception ex) {
-
-        }
-    }
+    INITIALIZING, RUNNING, TERMINATING, PAUSED, STOPPED
 }

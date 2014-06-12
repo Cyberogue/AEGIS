@@ -17,133 +17,55 @@
 package org.aegis;
 
 /**
- * Abstract class which represents a single game scene with its own loading and
- * run methods
+ * Abstract class providing the framework for separate game code for a single
+ * scene
  *
  * @author Rogue <Alice Q>
  */
-public abstract class GameScene implements java.lang.Runnable {
+public abstract class GameScene {
 
-    // SCENE NAME FOR IDENTIFICATION
+    // THE ID WHICH THE SCENE WILL USE
     private String sceneID;
 
-    // SCENE STATE
-    private SceneState currentState;
-    private SceneState lastState;
-
-    public GameScene(String name) {
-        sceneID = name;
-        currentState = SceneState.INIT;
-    }
-
     /**
-     * Main overriden method which runs a different hook based on the state, DO
-     * NOT TOUCH
-     */
-    @Override
-    public void run() {
-        switch (currentState) {
-            case INIT:
-                initialize();
-                currentState = SceneState.RUN;
-                break;
-            case RUN:
-                main();
-                break;
-            case END:
-                terminate();
-                currentState = SceneState.COMPLETED;
-                break;
-            case PAUSED:
-                pause();
-                break;
-        }
-    }
-
-    /**
-     * Switches the current state. Note that changes take place on the next game
-     * loop.
+     * Basic constructor
      *
-     * @param state The state to switch to
+     * @param sceneID A string identifier to use for the scene
      */
-    public void switchToState(SceneState state) {
-        currentState = state;
+    public GameScene(String sceneID) {
+        this.sceneID = sceneID;
     }
 
     /**
-     * Switches to the PAUSED state
-     */
-    public void pause() {
-        lastState = currentState;
-        currentState = SceneState.PAUSED;
-    }
-
-    /**
-     * Resumes from the PAUSED state to whatever state it was formerly in
-     */
-    public void resume() {
-        currentState = lastState;
-    }
-
-    /**
-     * Switches to the scene termination state
-     */
-    public void end() {
-        currentState = SceneState.END;
-    }
-
-    /**
-     * @return The current state the scene is in
-     */
-    public SceneState getCurrentState() {
-        return currentState;
-    }
-
-    /**
-     * @return The name of the string
+     * @return The string identifier for the scene
      */
     public String getSceneID() {
         return sceneID;
     }
 
     /**
-     * @return The name and state of the scene in String form
+     * Hook method for scene entry. Use this for things such as initializations
+     * and GUI loading
      */
-    @Override
-    public String toString() {
-        return sceneID + " [" + currentState.toString() + "]";
-    }
-
-    // HOOK METHODS
-    /**
-     * Hook method for scene initialization, override for single-run
-     * initialization method
-     */
-    protected abstract void initialize();
+    public abstract void onSceneEnter();
 
     /**
-     * Hook method for the game loop, override with the main scene loop
+     * Hook method for the main runnable code. This code is called once a game
+     * loop
      */
-    protected abstract void main();
+    public abstract void update();
 
     /**
-     * Hook method for cleanup before stopping the scene, override for
-     * single-run end method
+     * Hook method for scene exit. This method is called before the scene is
+     * swapped out
      */
-    protected abstract void terminate();
+    public abstract void onSceneExit();
 
     /**
-     * Hook method for pausing the scene, override with paused code
+     * Hook method for paused runnable code. This code is called once a game
+     * loop when the game is paused.
      */
-    protected void paused() {
+    public void paused() {
 
-    }
-
-    /**
-     * All the states a scene can be in
-     */
-    public enum SceneState {
-
-        INIT, RUN, PAUSED, END, COMPLETED
     }
 }

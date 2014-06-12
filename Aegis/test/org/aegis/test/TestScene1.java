@@ -16,41 +16,28 @@
  */
 package org.aegis.test;
 
-import org.aegis.*;
-
 /**
  *
  * @author Rogue <Alice Q>
  */
-public class Program {
+public class TestScene1 extends org.aegis.GameScene {
 
-    public static void main(String[] args) {
-        try {
-            Orchestrator o = new Orchestrator();
-            Timekeeper tk = new Timekeeper(o, 3.0f);
+    public TestScene1(String sceneID) {
+        super(sceneID);
+    }
 
-            tk.setDaemon(true); //TEMP
+    @Override
+    public void onSceneEnter() {
+        System.out.println("Enter 1");
+    }
 
-            o.add(new TestScene1("Scene 1"));
-            o.add(new TestScene2("Scene 2"));
+    @Override
+    public void update() {
+        System.out.println("Update 1");
+    }
 
-            tk.start();
-            Thread.sleep(3000);
-
-            o.switchTo("Scene 2");
-            Thread.sleep(2500);
-
-            o.pause();
-            Thread.sleep(2500);
-
-            o.unpause();
-            Thread.sleep(1000);
-
-            o.terminate();
-
-            Thread.sleep(500);
-        } catch (Exception ex) {
-
-        }
+    @Override
+    public void onSceneExit() {
+        System.out.println("Exit 1");
     }
 }
