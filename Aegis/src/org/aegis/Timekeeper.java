@@ -42,6 +42,7 @@ public class Timekeeper extends java.lang.Thread {
     private float performance;  // STORES THE PERFORMANCE RATING AS A PERCENTAGE BETWEEN TARGET AND ACTUAL FRAME RATES
     private long lastRuntime;   // USED TO STORE THE TIME BETWEEN TWO SUBSEQUENT CALLS IN MILLIS
     private long averageRuntime;   // USED TO STORE A RUNNING AVERAGE OF THE RUNTIME IN MILLIS
+    private long framenumber = 1;
 
     /**
      * Simple constructor set to FRAMERATE_LOW
@@ -161,6 +162,13 @@ public class Timekeeper extends java.lang.Thread {
         return (float) 1000 / averageRuntime;
     }
 
+    /**
+     * @return The total number of frames that have been elapsed
+     */
+    public long getFramenumber() {
+        return framenumber;
+    }
+
     // Main running method
     /**
      * Method which calls run() on the Runnable in a loop while updating
@@ -199,7 +207,7 @@ public class Timekeeper extends java.lang.Thread {
             performance = (float) runtime / targetMillis;
 
             lastRuntime = runtime;
-
+            framenumber++;
         }
     }
 
@@ -209,6 +217,6 @@ public class Timekeeper extends java.lang.Thread {
      */
     @Override
     public String toString() {
-        return "[" + child.toString() + "]\tT:" + (unlockedFramerate ? "U" : targetFramerate) + "\tC:" + ((float) 1000 / averageRuntime) + "\tP:" + performance;
+        return "[" + child.toString() + "]\t[" + framenumber + "]\t[T:" + (unlockedFramerate ? "U" : targetFramerate) + "\tC:" + ((float) 1000 / averageRuntime) + "\tP:" + performance + "]";
     }
 }

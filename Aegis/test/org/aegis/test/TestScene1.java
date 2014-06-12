@@ -16,14 +16,19 @@
  */
 package org.aegis.test;
 
+import org.aegis.Timekeeper;
+
 /**
  *
  * @author Rogue <Alice Q>
  */
 public class TestScene1 extends org.aegis.GameScene {
 
-    public TestScene1(String sceneID) {
+    Timekeeper tk;
+
+    public TestScene1(String sceneID, Timekeeper tk) {
         super(sceneID);
+        this.tk = tk;
     }
 
     @Override
@@ -33,7 +38,7 @@ public class TestScene1 extends org.aegis.GameScene {
 
     @Override
     public void update() {
-        System.out.println("Update 1");
+        System.out.println("Update 1 " + tk.toString());
     }
 
     @Override

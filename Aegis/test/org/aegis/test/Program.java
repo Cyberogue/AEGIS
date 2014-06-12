@@ -27,12 +27,12 @@ public class Program {
     public static void main(String[] args) {
         try {
             Orchestrator o = new Orchestrator();
-            Timekeeper tk = new Timekeeper(o, 3.0f);
+            Timekeeper tk = new Timekeeper(o, 10.0f);
 
             tk.setDaemon(true); //TEMP
-
-            o.add(new TestScene1("Scene 1"));
-            o.add(new TestScene2("Scene 2"));
+            
+            o.add(new TestScene1("Scene 1", tk));
+            o.add(new TestScene2("Scene 2", tk));
 
             tk.start();
             Thread.sleep(3000);
