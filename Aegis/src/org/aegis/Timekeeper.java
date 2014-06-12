@@ -183,13 +183,14 @@ public class Timekeeper extends java.lang.Thread {
      */
     @Override
     public void run() {
-        while (true) {
-            // SET SOME INITIAL VALUES IN CASE OF READ
-            lastRuntime = targetMillis;
-            averageRuntime = lastRuntime;
-            performance = 1.0f;
+        // SET SOME INITIAL VALUES IN CASE OF READ
+        lastRuntime = targetMillis;
+        averageRuntime = lastRuntime;
+        performance = 1.0f;
 
-            // AND RUN MAIN
+        // AND RUN MAIN
+        while (true) {
+
             // GET THE START TIME
             long startTime = System.currentTimeMillis();
 
@@ -197,7 +198,8 @@ public class Timekeeper extends java.lang.Thread {
             child.run();
 
             // GET THE DELTA TIME AND FIND THE WAIT TIME
-            long delta = startTime + targetMillis - System.currentTimeMillis();
+            long stopTime = System.currentTimeMillis();
+            long delta = targetMillis - (stopTime - startTime);
 
             // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
             if (delta > 0 && !unlockedFramerate) {
@@ -212,18 +214,16 @@ public class Timekeeper extends java.lang.Thread {
 
             averageRuntime = (lastRuntime + runtime) / 2;
             performance = (float) runtime / targetMillis;
-
             lastRuntime = runtime;
             framenumber++;
         }
     }
 
     /**
-     * @return A string of the format [child.toString] <target
-     * framerate>:<calculated framerate>:<performance index>
+     * @return A string representation of the timekeeper's statistics
      */
     @Override
     public String toString() {
-        return "[" + child.toString() + "]\t[" + framenumber + "]\t[T:" + (unlockedFramerate ? "U" : targetFramerate) + "\tC:" + ((float) 1000 / averageRuntime) + "\tP:" + performance + "]";
+        return "[" + framenumber + "]\t[T:" + (unlockedFramerate ? "U" : targetFramerate) + "\tC:" + ((float) 1000 / averageRuntime) + "\tP:" + performance + "]";
     }
 }

@@ -31,7 +31,8 @@ import org.aegis.Timekeeper;
  */
 public class TestScene2 extends org.aegis.GameScene {
 
-    Timekeeper tk;
+    private Timekeeper tk;
+    private final static java.util.Random rand = new java.util.Random();
 
     public TestScene2(String sceneID, Timekeeper tk) {
         super(sceneID);
@@ -45,7 +46,14 @@ public class TestScene2 extends org.aegis.GameScene {
 
     @Override
     public void update() {
-        System.out.println("Update 2 " + tk.toString());
+        int sleepFor = rand.nextInt(100) + 50;
+        System.out.print("[" + sleepFor + "]\tUpdate 2\t");
+        try {
+            Thread.sleep(sleepFor);
+        } catch (Exception ex) {
+
+        }
+        System.out.println(tk.toString());
     }
 
     @Override
