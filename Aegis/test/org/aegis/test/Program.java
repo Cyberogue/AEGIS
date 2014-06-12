@@ -23,62 +23,49 @@ import org.aegis.*;
  *
  * @author Rogue <Alice Q>
  */
-public class Program implements java.lang.Runnable {
+public class Program extends GameScene {
 
     private static final java.util.Random rand = new java.util.Random();
     private static Timekeeper tk;
 
     @Override
+    public void initialize() {
+        System.out.println("Start run (15FPS)");
+    }
 
-    public void run() {
+    @Override
+    public void main() {
         try {
             // SIMULATE A RANDOM LOOP DURATION
             int sleepFor = rand.nextInt(150) + 50;
 
             Thread.sleep(sleepFor);
-            
+
             // PRINT STATISTICS
-            System.out.println(tk.toString() + "\tdelay:" + sleepFor);
+            System.out.println(tk.toString() + "\tDelay:" + sleepFor);
         } catch (Exception ex) {
             System.out.println("Error in run " + ex.toString());
         }
     }
 
+    public void terminate() {
+        System.out.println("Exit now?");
+        tk.suspend();
+    }
+
+    public Program(String sceneID) {
+        super(sceneID);
+    }
+
     public static void main(String[] args) {
         try {
-            // INITIAL MESSAGE
-            System.out.println("Start run");
-
             // INITIALIZE TIMEKEEPER TO LOOOW FPS
-            tk = new Timekeeper(new Program(), 2.0f);
-            tk.setPriority(Thread.MAX_PRIORITY);
+            tk = new Timekeeper(new Program("Testprog"), 15.0f);
             tk.start();
 
-            System.out.println("Testing at 2FPS");
-            Thread.sleep(3000);
-
-            // SET THE NEW FRAMERATE TO CAUSE CLIPPING
-            tk.lockFramerate(7.0f);
-            System.out.println("Testing at 7FPS");
-            Thread.sleep(3000);
-
-            // SET THE NEW FRAMERATE TO SOMETHING HIGHER
-            tk.lockFramerate(30.0f);
-            System.out.println("Testing at 30FPS");
-            Thread.sleep(3000);
-
-            // SET THE NEW FRAMERATE TO SOMETHING HIGHER
-            tk.unlockFramerate(60.0f);
-            System.out.println("Testing at unlocked framerate");
-            Thread.sleep(3000);
-
-            // EXIT OTHERWISE THE THREAD WILL RUN ENDLESSLY
-            System.out.println("End run");
-            tk.pause();
-
-            Thread.sleep(1000);
-            System.out.println("Should exit now?");
-            tk.suspend();
+            Thread.sleep(5000);
+            
+            ((GameScene) tk.getChild()).end();
         } catch (Exception ex) {
             // PRINT ERROR
             System.out.println("Error in main " + ex.toString());

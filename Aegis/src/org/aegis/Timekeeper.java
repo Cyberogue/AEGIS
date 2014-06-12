@@ -38,8 +38,6 @@ public class Timekeeper extends java.lang.Thread {
     private long targetMillis;
     private boolean unlockedFramerate;
 
-    private boolean running = true;
-
     // STATISTICS
     private float performance;  // STORES THE PERFORMANCE RATING AS A PERCENTAGE BETWEEN TARGET AND ACTUAL FRAME RATES
     private long lastRuntime;   // USED TO STORE THE TIME BETWEEN TWO SUBSEQUENT CALLS IN MILLIS
@@ -77,8 +75,6 @@ public class Timekeeper extends java.lang.Thread {
     // SETTERS
     // - unlockFramerate
     // - lockFramerate
-    // - pause
-    // - unpause
     /**
      * Used to lock the framerate
      *
@@ -106,24 +102,10 @@ public class Timekeeper extends java.lang.Thread {
         this.unlockedFramerate = true;
     }
 
-    /**
-     * Pauses the Timekeeper
-     */
-    public void pause() {
-        this.running = false;
-    }
-
-    /**
-     * Resumes the Timekeeper
-     */
-    public void unpause() {
-        this.running = true;
-    }
-
     // GETTERS
     // - getTargetFramerate
     // - isUnlocked
-    // - isPaused
+    // - getChild
     /**
      * @return The child frame rate
      */
@@ -139,10 +121,10 @@ public class Timekeeper extends java.lang.Thread {
     }
 
     /**
-     * @return Whether or not the Timekeeper is paused
+     * @return The child object that is being observed
      */
-    public boolean isPaused() {
-        return !running;
+    public Runnable getChild() {
+        return child;
     }
 
     // STATISTICS
@@ -193,32 +175,31 @@ public class Timekeeper extends java.lang.Thread {
             performance = 1.0f;
 
             // AND RUN MAIN
-            while (running) {
-                // GET THE START TIME
-                long startTime = System.currentTimeMillis();
+            // GET THE START TIME
+            long startTime = System.currentTimeMillis();
 
-                // PASS ON THE METHOD TO THE CHILD WHILE OBSERVING STATISTICS
-                child.run();
+            // PASS ON THE METHOD TO THE CHILD WHILE OBSERVING STATISTICS
+            child.run();
 
-                // GET THE DELTA TIME AND FIND THE WAIT TIME
-                long delta = startTime + targetMillis - System.currentTimeMillis();
+            // GET THE DELTA TIME AND FIND THE WAIT TIME
+            long delta = startTime + targetMillis - System.currentTimeMillis();
 
-                // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
-                if (delta > 0 && !unlockedFramerate) {
-                    try {
-                        Thread.sleep(delta);
-                    } catch (InterruptedException ex) {
-                    }
+            // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
+            if (delta > 0 && !unlockedFramerate) {
+                try {
+                    Thread.sleep(delta);
+                } catch (InterruptedException ex) {
                 }
-
-                // CALCULATE STATISTICS AND FINISH UP
-                long runtime = System.currentTimeMillis() - startTime;
-
-                averageRuntime = (lastRuntime + runtime) / 2;
-                performance = (float) runtime / targetMillis;
-
-                lastRuntime = runtime;
             }
+
+            // CALCULATE STATISTICS AND FINISH UP
+            long runtime = System.currentTimeMillis() - startTime;
+
+            averageRuntime = (lastRuntime + runtime) / 2;
+            performance = (float) runtime / targetMillis;
+
+            lastRuntime = runtime;
+
         }
     }
 
