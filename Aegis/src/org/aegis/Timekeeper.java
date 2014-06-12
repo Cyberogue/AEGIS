@@ -215,7 +215,7 @@ public class Timekeeper extends java.lang.Thread {
                 long runtime = System.currentTimeMillis() - startTime;
 
                 averageRuntime = (lastRuntime + runtime) / 2;
-                performance = (float) targetMillis / runtime;
+                performance = (float) runtime / targetMillis;
 
                 lastRuntime = runtime;
             }

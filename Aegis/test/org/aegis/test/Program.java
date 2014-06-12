@@ -33,10 +33,12 @@ public class Program implements java.lang.Runnable {
     public void run() {
         try {
             // SIMULATE A RANDOM LOOP DURATION
-            Thread.sleep(50 + rand.nextInt(100));
+            int sleepFor = rand.nextInt(150) + 50;
 
+            Thread.sleep(sleepFor);
+            
             // PRINT STATISTICS
-            System.out.println(tk.toString());
+            System.out.println(tk.toString() + "\tdelay:" + sleepFor);
         } catch (Exception ex) {
             System.out.println("Error in run " + ex.toString());
         }
@@ -49,6 +51,7 @@ public class Program implements java.lang.Runnable {
 
             // INITIALIZE TIMEKEEPER TO LOOOW FPS
             tk = new Timekeeper(new Program(), 2.0f);
+            tk.setPriority(Thread.MAX_PRIORITY);
             tk.start();
 
             System.out.println("Testing at 2FPS");
