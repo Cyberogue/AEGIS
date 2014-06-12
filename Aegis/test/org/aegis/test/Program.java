@@ -36,26 +36,29 @@ public class Program {
             Orchestrator o = new Orchestrator();
             Timekeeper tk = new Timekeeper(o, 10.0f);
 
-            //tk.setDaemon(true); //TEMP
+            tk.setDaemon(true); //TEMP
             
             o.add(new TestScene1("Scene 1", tk));
             o.add(new TestScene2("Scene 2", tk));
 
-            tk.start();/*
+            tk.start();
             Thread.sleep(3000);
 
             o.switchTo("Scene 2");
             Thread.sleep(2500);
 
             o.pause();
-            Thread.sleep(2500);
+            Thread.sleep(1000);
+            
+            tk.unlockFramerate(10.0f);
+            Thread.sleep(500);
 
             o.unpause();
-            Thread.sleep(1000);
+            Thread.sleep(1500);
 
             o.terminate();
 
-            Thread.sleep(500);*/
+            Thread.sleep(500);
         } catch (Exception ex) {
 
         }

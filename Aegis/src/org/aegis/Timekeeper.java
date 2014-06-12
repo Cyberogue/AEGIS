@@ -224,6 +224,6 @@ public class Timekeeper extends java.lang.Thread {
      */
     @Override
     public String toString() {
-        return "[" + framenumber + "]\t[T:" + (unlockedFramerate ? "U" : targetFramerate) + "\tC:" + ((float) 1000 / averageRuntime) + "\tP:" + performance + "]";
+        return String.format("[%06d]\t[%4.2f%c\t% 8.2f\t%.3f]", framenumber, targetFramerate, (unlockedFramerate ? '+' : ' '), 1000.0f / averageRuntime, performance);
     }
 }

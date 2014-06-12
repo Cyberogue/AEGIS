@@ -63,7 +63,14 @@ public class TestScene2 extends org.aegis.GameScene {
 
     @Override
     public void paused() {
-        System.out.println("Paused 2");
+       int sleepFor = rand.nextInt(10);
+        System.out.print("[" + sleepFor + "]\tPaused 2\t");
+        try {
+            Thread.sleep(sleepFor);
+        } catch (Exception ex) {
+
+        }
+        System.out.println(tk.toString());
     }
 
 }
