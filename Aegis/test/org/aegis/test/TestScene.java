@@ -23,41 +23,32 @@
  */
 package org.aegis.test;
 
-import org.aegis.Timekeeper;
+import org.aegis.Synchronizer;
 
 /**
  *
  * @author Rogue <Alice Q>
  */
-public class TestScene1 extends org.aegis.GameScene {
+public class TestScene extends org.aegis.GameScene {
 
-    private Timekeeper tk;
     private final static java.util.Random rand = new java.util.Random();
 
-    public TestScene1(String sceneID, Timekeeper tk) {
+    public TestScene(String sceneID) {
         super(sceneID);
-        this.tk = tk;
     }
 
     @Override
     public void onSceneEnter() {
-        System.out.println("Enter 1");
+
     }
 
     @Override
     public void update() {
-        int sleepFor = rand.nextInt(100) + 50;
-        System.out.print("[" + sleepFor + "]\tUpdate 1\t");
-        try {
-            Thread.sleep(sleepFor);
-        } catch (Exception ex) {
-            System.out.println(ex.toString());
-        }
-        System.out.println(tk.toString());
+
     }
 
     @Override
     public void onSceneExit() {
-        System.out.println("Exit 1");
+
     }
 }

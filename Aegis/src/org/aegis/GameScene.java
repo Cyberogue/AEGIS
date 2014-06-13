@@ -46,7 +46,7 @@ public abstract class GameScene {
     /**
      * @return The string identifier for the scene
      */
-    public String getSceneID() {
+    public final String getSceneID() {
         return sceneID;
     }
 

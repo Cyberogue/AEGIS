@@ -45,6 +45,9 @@ public class Synchronizer extends java.lang.Thread {
     private long targetMillis;
     private boolean unlockedFramerate;
 
+    // SEMAPHORE FOR PAUSING
+    private int pauseSem = 0;
+
     // STATISTICS
     private float performance;  // STORES THE PERFORMANCE RATING AS A PERCENTAGE BETWEEN TARGET AND ACTUAL FRAME RATES
     private long lastRuntime;   // USED TO STORE THE TIME BETWEEN TWO SUBSEQUENT CALLS IN MILLIS
@@ -72,13 +75,13 @@ public class Synchronizer extends java.lang.Thread {
         if (targetFramerate <= 0.0f) {
             throw new IllegalArgumentException("Framerate must be positive and non-zero");
         }
-        
+
         child = syncedObject;
-        
+
         this.targetFramerate = targetFramerate;
         this.targetMillis = (long) (1000 / targetFramerate);
         this.unlockedFramerate = false;
-        
+
         this.setDaemon(true);
     }
 
@@ -94,7 +97,7 @@ public class Synchronizer extends java.lang.Thread {
         if (newFramerate <= 0.0f) {
             throw new IllegalArgumentException("Framerate must be positive and non-zero");
         }
-        
+
         this.targetFramerate = newFramerate;
         this.targetMillis = (long) (1000 / newFramerate);
         this.unlockedFramerate = false;
@@ -178,7 +181,20 @@ public class Synchronizer extends java.lang.Thread {
         return framenumber;
     }
 
-    // Main running method
+    // CONCURRENCY
+    public void pause() {
+        pauseSem++;
+    }
+
+    public void unpauseIfPossible() {
+        if (pauseSem > 0) {
+            pauseSem--;
+        }
+    }
+
+    // OVERWRITTEN METHODS
+    // - run()
+    // - toString()
     /**
      * Method which calls run() on the Runnable in a loop while updating
      * statistics on each subsequent run
@@ -213,7 +229,7 @@ public class Synchronizer extends java.lang.Thread {
 
             // CALCULATE STATISTICS AND FINISH UP
             long runtime = System.currentTimeMillis() - startTime;
-            
+
             averageRuntime = (lastRuntime + runtime) / 2;
             performance = (float) runtime / targetMillis;
             lastRuntime = runtime;

@@ -23,54 +23,40 @@
  */
 package org.aegis.test;
 
-import org.aegis.Timekeeper;
+import org.aegis.Synchronizer;
 
 /**
  *
  * @author Rogue <Alice Q>
  */
-public class TestScene2 extends org.aegis.GameScene {
+public class DebugScene extends org.aegis.GameScene {
 
-    private Timekeeper tk;
+    private Synchronizer tk;
     private final static java.util.Random rand = new java.util.Random();
 
-    public TestScene2(String sceneID, Timekeeper tk) {
+    public DebugScene(String sceneID, Synchronizer tk) {
         super(sceneID);
         this.tk = tk;
     }
 
     @Override
     public void onSceneEnter() {
-        System.out.println("Enter 2");
+        System.out.println("Enter\t" + tk.toString());
     }
 
     @Override
     public void update() {
-        int sleepFor = rand.nextInt(100) + 50;
-        System.out.print("[" + sleepFor + "]\tUpdate 2\t");
-        try {
-            Thread.sleep(sleepFor);
-        } catch (Exception ex) {
-
-        }
-        System.out.println(tk.toString());
+        System.out.println("Update\t" + tk.toString());
     }
 
     @Override
     public void onSceneExit() {
-        System.out.println("Exit 2");
+        System.out.println("Exit\t" + tk.toString());
     }
 
     @Override
     public void paused() {
-       int sleepFor = rand.nextInt(10);
-        System.out.print("[" + sleepFor + "]\tPaused 2\t");
-        try {
-            Thread.sleep(sleepFor);
-        } catch (Exception ex) {
-
-        }
-        System.out.println(tk.toString());
+        System.out.println("Paused\t" + tk.toString());
     }
 
 }

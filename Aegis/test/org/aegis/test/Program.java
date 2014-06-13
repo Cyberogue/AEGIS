@@ -23,7 +23,10 @@
  */
 package org.aegis.test;
 
+import org.aegis2d.GameWindow;
 import org.aegis.*;
+
+import java.awt.event.*;
 
 /**
  *
@@ -32,35 +35,84 @@ import org.aegis.*;
 public class Program {
 
     public static void main(String[] args) {
-        try {
-            Orchestrator o = new Orchestrator();
-            Timekeeper tk = new Timekeeper(o, 10.0f);
 
-            tk.setDaemon(true); //TEMP
-            
-            o.add(new TestScene1("Scene 1", tk));
-            o.add(new TestScene2("Scene 2", tk));
+        final Orchestrator o = new Orchestrator();
+        final Synchronizer timer = new Synchronizer(o, 10.0f);
+        final GameWindow w = new GameWindow("My Game", 1280, 768, timer);
 
-            tk.start();
-            Thread.sleep(3000);
+        o.add(new TestScene("Test"));
+        o.add(new DebugScene("Debug", timer));
 
-            o.switchTo("Scene 2");
-            Thread.sleep(2500);
+        w.addKeyListener(new KeyListener() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                switch (e.getKeyChar()) {
+                    case '1':
+                        w.setDimensions(1024, 768);
+                        w.applyChanges();
+                        System.out.println("Set size to 1024x768");
+                        break;
+                    case '2':
+                        w.setDimensions(1280, 768);
+                        w.applyChanges();
+                        System.out.println("Set size to 1280x768");
+                        break;
+                    case '3':
+                        w.setDimensions(1920, 1080);
+                        w.applyChanges();
+                        System.out.println("Set size to 1920x1080");
+                        break;
+                    case 'f':
+                        w.setFullscreen(!w.isFullstreen());
+                        w.applyChanges();
+                        System.out.println("Turned Fullscreen " + (w.isFullstreen() ? "on" : "off"));
+                        break;
+                    case 'b':
+                        w.setBorderless(!w.isBorderless());
+                        w.applyChanges();
+                        System.out.println("Turned Borderless " + (w.isBorderless() ? "on" : "off"));
+                        break;
+                    //-----------
+                    case '+':
+                    case '=':
+                        timer.lockFramerate(timer.getTargetFramerate() * 0.8f);
+                        System.out.println("Increased framerate to " + (timer.getTargetFramerate() * 0.8f));
+                        break;
+                    case '-':
+                        timer.lockFramerate(timer.getTargetFramerate() * 1.2f);
+                        System.out.println("Increased framerate to " + (timer.getTargetFramerate() * 1.2f));
+                        break;
+                    case 'u':
+                        timer.unlockFramerate(10.0f);
+                        System.out.println("Set framerate to 10fps unlocked");
+                        break;
+                    //-----------
+                    case 'd':
+                        o.switchTo("Debug");
+                        System.out.println("Entered debug scene");
+                        break;
+                    case 't':
+                        o.switchTo("Test");
+                        System.out.println("Entered test scene");
+                        break;
+                    //-----------
+                    default:
+                        System.out.println("Pressed " + e.getKeyChar());
+                        break;
+                }
 
-            o.pause();
-            Thread.sleep(1000);
-            
-            tk.unlockFramerate(10.0f);
-            Thread.sleep(500);
+            }
 
-            o.unpause();
-            Thread.sleep(1500);
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
 
-            o.terminate();
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+        });
 
-            Thread.sleep(500);
-        } catch (Exception ex) {
+        timer.start();
 
-        }
     }
 }
