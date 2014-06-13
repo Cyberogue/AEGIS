@@ -151,14 +151,17 @@ public class GameWindow extends JFrame {
         // HIDE THE WINDOW TO APPLY CHANGES
         setVisible(false);
 
+        // PRINT THE GRAPHICAL CONFIG
         System.out.println(config.toString());
 
         // MAKE THE WINDOW FULLSCREEN IF REQUIRED
         if (config.isFullscreen() && gd.isFullScreenSupported()) {
+            System.out.println("FFF");
             setSize(tk.getScreenSize().width, tk.getScreenSize().height);     // CHANGE THE WINDOW SIZE
             gd.setFullScreenWindow(this);       // REQUEST NATIVE FULLSCREEN
 
         } else if (!config.isFullscreen()) {
+            System.out.println("WWW");
             gd.setFullScreenWindow(null);   // EXIT FULLSCREEN
             setSize(config.width, config.height);    // RESUME TO ORIGINAL SIZE
         }
@@ -174,7 +177,7 @@ public class GameWindow extends JFrame {
 
         // THERE REALLY ISN'T MUCH NEED FOR THIS, BUT IT MAKES THE GAME LOOK LIKE IT'S DOING SOMETHING. I GUESS IT ALSO ALLOWS SOME TIME FOR CHANGES TO TAKE EFFECT
         try {
-            java.lang.Thread.sleep(250);
+            java.lang.Thread.sleep(500);
         } catch (InterruptedException ex) {
 
         }
