@@ -27,6 +27,7 @@ import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
@@ -48,6 +49,9 @@ public class GameWindow extends JFrame {
     // GRAPHICS DEVICE
     private GraphicsDevice gd;
 
+    // TOOLKIT
+    private Toolkit tk;
+
     /**
      * Basic constructor
      *
@@ -59,14 +63,16 @@ public class GameWindow extends JFrame {
     public GameWindow(String title, int width, int height, Synchronizer timer) {
         super(title);
 
+        this.gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
+        this.tk = Toolkit.getDefaultToolkit();
+
+        this.timer = timer;
+        this.config = new WindowConfig(width, height);
+
         setSize(width, height);
-        setVisible(true);
         setDefaultCloseOperation(GameWindow.EXIT_ON_CLOSE);
 
-        this.gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        this.timer = timer;
-
-        config = new WindowConfig(width, height);
+        setVisible(true);
     }
 
     /**
@@ -76,7 +82,16 @@ public class GameWindow extends JFrame {
      * @param height The new height
      */
     public void setDimensions(int width, int height) {
-        config.setDimensions(width, height);
+        config.width = width;
+        config.height = height;
+    }
+
+    /**
+     * Changes the window's dimensions to the native resolution
+     */
+    public void fitToScreen() {
+        config.width = tk.getScreenSize().width;
+        config.height = tk.getScreenSize().height;
     }
 
     /**
@@ -85,7 +100,8 @@ public class GameWindow extends JFrame {
      * @param active A boolean value
      */
     public void setFullscreen(boolean active) {
-        config.setFullscreen(active);
+        config.fullscreen = active;
+        config.borderless = active;
     }
 
     /**
@@ -94,7 +110,7 @@ public class GameWindow extends JFrame {
      * @param active A boolean value
      */
     public void setBorderless(boolean active) {
-
+        config.borderless = active;
     }
 
     /**
@@ -129,21 +145,42 @@ public class GameWindow extends JFrame {
      * Applies any changes set into the game window's configuration
      */
     public void applyChanges() {
+        // PAUSE THE TIMER TO PREVENT UNWANTED UPDATES
+        timer.requestPause();
+
         // HIDE THE WINDOW TO APPLY CHANGES
         setVisible(false);
-        
-        // PAUSE THE TIMER TO PREVENT UNWANTED UPDATES
-        timer.suspend();
+
+        System.out.println(config.toString());
 
         // MAKE THE WINDOW FULLSCREEN IF REQUIRED
         if (config.isFullscreen() && gd.isFullScreenSupported()) {
-            gd.setFullScreenWindow(this);
+            setSize(tk.getScreenSize().width, tk.getScreenSize().height);     // CHANGE THE WINDOW SIZE
+            gd.setFullScreenWindow(this);       // REQUEST NATIVE FULLSCREEN
+
         } else if (!config.isFullscreen()) {
-            gd.setFullScreenWindow(null);
+            gd.setFullScreenWindow(null);   // EXIT FULLSCREEN
+            setSize(config.width, config.height);    // RESUME TO ORIGINAL SIZE
         }
 
-        // CHANGE THE WINDOW SIZE
-        setSize(config.getWidth(), config.getHeight());
+        // SET THE NEW ICON IF IT'S NOT NULL
+        if (config.icon != null) {
+            setIconImage(config.icon.getImage());
+        }
+
+        // BORDERLESS MAYBE?
+        dispose();
+        setUndecorated(config.isBorderless());
+
+        // THERE REALLY ISN'T MUCH NEED FOR THIS, BUT IT MAKES THE GAME LOOK LIKE IT'S DOING SOMETHING. I GUESS IT ALSO ALLOWS SOME TIME FOR CHANGES TO TAKE EFFECT
+        try {
+            java.lang.Thread.sleep(250);
+        } catch (InterruptedException ex) {
+
+        }
+
+        // UNPAUSE THE TIMER
+        timer.releasePause();
 
         // SHOW THE WINDOW
         setVisible(true);
@@ -163,9 +200,6 @@ public class GameWindow extends JFrame {
         private boolean fullscreen = false;
         private boolean borderless = false;
         private ImageIcon icon = null;
-
-        // TOOLKIT
-        private final static Toolkit tk = Toolkit.getDefaultToolkit();
 
         /**
          * Basic constructor
@@ -197,19 +231,11 @@ public class GameWindow extends JFrame {
         }
 
         public int getWidth() {
-            if (fullscreen) {
-                return (int) tk.getScreenSize().getWidth();
-            } else {
-                return width;
-            }
+            return width;
         }
 
         public int getHeight() {
-            if (fullscreen) {
-                return (int) tk.getScreenSize().getHeight();
-            } else {
-                return height;
-            }
+            return height;
         }
 
         public boolean isFullscreen() {
@@ -222,6 +248,11 @@ public class GameWindow extends JFrame {
 
         public ImageIcon getIcon() {
             return icon;
+        }
+
+        @Override
+        public String toString() {
+            return width + "x" + height + (fullscreen ? " -F" : "") + (borderless ? " -B" : "") + (icon == null ? "" : " " + icon.toString());
         }
     }
 }

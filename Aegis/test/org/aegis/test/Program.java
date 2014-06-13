@@ -50,41 +50,46 @@ public class Program {
                     case '1':
                         w.setDimensions(1024, 768);
                         w.applyChanges();
-                        System.out.println("Set size to 1024x768");
                         break;
                     case '2':
                         w.setDimensions(1280, 768);
                         w.applyChanges();
-                        System.out.println("Set size to 1280x768");
                         break;
                     case '3':
                         w.setDimensions(1920, 1080);
                         w.applyChanges();
-                        System.out.println("Set size to 1920x1080");
                         break;
+                    case '4':
+                        w.fitToScreen();
+                        w.applyChanges();
+                        break;
+                    case '5':
+                        w.fitToScreen();
+                        w.setBorderless(true);
+                        w.applyChanges();
+                        break;
+                    //-----------     
                     case 'f':
                         w.setFullscreen(!w.isFullstreen());
                         w.applyChanges();
-                        System.out.println("Turned Fullscreen " + (w.isFullstreen() ? "on" : "off"));
                         break;
                     case 'b':
                         w.setBorderless(!w.isBorderless());
                         w.applyChanges();
-                        System.out.println("Turned Borderless " + (w.isBorderless() ? "on" : "off"));
                         break;
                     //-----------
                     case '+':
                     case '=':
                         timer.lockFramerate(timer.getTargetFramerate() * 0.8f);
-                        System.out.println("Increased framerate to " + (timer.getTargetFramerate() * 0.8f));
+                        System.out.println("Framerate " + (timer.getTargetFramerate() * 0.8f));
                         break;
                     case '-':
                         timer.lockFramerate(timer.getTargetFramerate() * 1.2f);
-                        System.out.println("Increased framerate to " + (timer.getTargetFramerate() * 1.2f));
+                        System.out.println("Framerate " + (timer.getTargetFramerate() * 1.2f));
                         break;
                     case 'u':
                         timer.unlockFramerate(10.0f);
-                        System.out.println("Set framerate to 10fps unlocked");
+                        System.out.println("Framerate Unlocked (10FPS)");
                         break;
                     //-----------
                     case 'd':
@@ -97,7 +102,6 @@ public class Program {
                         break;
                     //-----------
                     default:
-                        System.out.println("Pressed " + e.getKeyChar());
                         break;
                 }
 

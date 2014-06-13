@@ -182,11 +182,20 @@ public class Synchronizer extends java.lang.Thread {
     }
 
     // CONCURRENCY
-    public void pause() {
+    // - requestPause
+    // - releasePause
+    /**
+     * Pauses the Synchronized object on the next game loop call
+     */
+    public void requestPause() {
         sem_pause++;
     }
 
-    public void unpauseIfPossible() {
+    /**
+     * Releases a pause request on the Synchronized object. The Synchronized
+     * object will remain paused until all pause requests are released.
+     */
+    public synchronized void releasePause() {
         if (sem_pause > 0) {
             sem_pause--;
         }
@@ -201,8 +210,9 @@ public class Synchronizer extends java.lang.Thread {
     // - run()
     // - toString()
     /**
-     * Method which calls run() on the Runnable in a loop while updating
-     * statistics on each subsequent run
+     * Main method which serves as a wrapper for runSynced() and simply
+     * initializes the initial values and provides an unsynchronized point to
+     * suspend on pause statements
      */
     @Override
     public void run() {
@@ -213,40 +223,46 @@ public class Synchronizer extends java.lang.Thread {
 
         // AND RUN MAIN
         while (true) {
-            if (sem_pause > 0) {
-                try {
-                    super.wait();
-                } catch (InterruptedException ex) {
-
-                }
-            }
-
-            // GET THE START TIME
-            long startTime = System.currentTimeMillis();
-
-            // PASS ON THE METHOD TO THE CHILD WHILE OBSERVING STATISTICS
-            child.run();
-
-            // GET THE DELTA TIME AND FIND THE WAIT TIME
-            long stopTime = System.currentTimeMillis();
-            long delta = targetMillis - (stopTime - startTime);
-
-            // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
-            if (delta > 0 && !unlockedFramerate) {
-                try {
-                    Thread.sleep(delta);
-                } catch (InterruptedException ex) {
-                }
-            }
-
-            // CALCULATE STATISTICS AND FINISH UP
-            long runtime = System.currentTimeMillis() - startTime;
-
-            averageRuntime = (lastRuntime + runtime) / 2;
-            performance = (float) runtime / targetMillis;
-            lastRuntime = runtime;
-            framenumber++;
+            // SUSPEND AT THIS CALL IF PAUSED
+            runSynced();
         }
+    }
+
+    private synchronized void runSynced() {
+        // WAIT UNTIL SEM_PAUSE IS 0 - THAT IS, THERE ARE NO PAUSE REQUESTS ON THIS THREAD
+        while (sem_pause > 0) {
+            try {
+                wait();
+            } catch (InterruptedException ex) {
+
+            }
+        }
+
+        // GET THE START TIME
+        long startTime = System.currentTimeMillis();
+
+        // PASS ON THE METHOD TO THE CHILD WHILE OBSERVING STATISTICS
+        child.run();
+
+        // GET THE DELTA TIME AND FIND THE WAIT TIME
+        long stopTime = System.currentTimeMillis();
+        long delta = targetMillis - (stopTime - startTime);
+
+        // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
+        if (delta > 0 && !unlockedFramerate) {
+            try {
+                Thread.sleep(delta);
+            } catch (InterruptedException ex) {
+            }
+        }
+
+        // CALCULATE STATISTICS AND FINISH UP
+        long runtime = System.currentTimeMillis() - startTime;
+
+        averageRuntime = (lastRuntime + runtime) / 2;
+        performance = (float) runtime / targetMillis;
+        lastRuntime = runtime;
+        framenumber++;
     }
 
     /**
