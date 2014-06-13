@@ -46,7 +46,7 @@ public class Synchronizer extends java.lang.Thread {
     private boolean unlockedFramerate;
 
     // SEMAPHORE FOR PAUSING
-    private int pauseSem = 0;
+    private int sem_pause = 0;
 
     // STATISTICS
     private float performance;  // STORES THE PERFORMANCE RATING AS A PERCENTAGE BETWEEN TARGET AND ACTUAL FRAME RATES
@@ -183,13 +183,18 @@ public class Synchronizer extends java.lang.Thread {
 
     // CONCURRENCY
     public void pause() {
-        pauseSem++;
+        sem_pause++;
     }
 
     public void unpauseIfPossible() {
-        if (pauseSem > 0) {
-            pauseSem--;
+        if (sem_pause > 0) {
+            sem_pause--;
         }
+        super.notify();
+    }
+
+    public boolean isPaused() {
+        return sem_pause > 0;
     }
 
     // OVERWRITTEN METHODS
@@ -208,6 +213,13 @@ public class Synchronizer extends java.lang.Thread {
 
         // AND RUN MAIN
         while (true) {
+            if (sem_pause > 0) {
+                try {
+                    super.wait();
+                } catch (InterruptedException ex) {
+
+                }
+            }
 
             // GET THE START TIME
             long startTime = System.currentTimeMillis();
