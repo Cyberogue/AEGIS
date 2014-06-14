@@ -49,18 +49,22 @@ public class Program {
                 switch (e.getKeyChar()) {
                     case '1':
                         w.setDimensions(1024, 768);
+                        w.setBorderless(false);
                         w.applyChanges();
                         break;
                     case '2':
                         w.setDimensions(1280, 768);
+                        w.setBorderless(false);
                         w.applyChanges();
                         break;
                     case '3':
                         w.setDimensions(1920, 1080);
+                        w.setBorderless(false);
                         w.applyChanges();
                         break;
                     case '4':
                         w.fitToScreen();
+                        w.setBorderless(false);
                         w.applyChanges();
                         break;
                     case '5':

@@ -156,14 +156,12 @@ public class GameWindow extends JFrame {
 
         // MAKE THE WINDOW FULLSCREEN IF REQUIRED
         if (config.isFullscreen() && gd.isFullScreenSupported()) {
-            System.out.println("FFF");
             setSize(tk.getScreenSize().width, tk.getScreenSize().height);     // CHANGE THE WINDOW SIZE
             gd.setFullScreenWindow(this);       // REQUEST NATIVE FULLSCREEN
-
         } else if (!config.isFullscreen()) {
-            System.out.println("WWW");
-            gd.setFullScreenWindow(null);   // EXIT FULLSCREEN
+
             setSize(config.width, config.height);    // RESUME TO ORIGINAL SIZE
+            gd.setFullScreenWindow(null);   // EXIT FULLSCREEN
         }
 
         // SET THE NEW ICON IF IT'S NOT NULL
