@@ -24,6 +24,7 @@
 package org.aegis.test;
 
 import org.aegis.game.AegisGame;
+import org.aegis.game.GameSceneManager;
 
 /**
  * Simple test program for running simple test cases
@@ -33,7 +34,10 @@ import org.aegis.game.AegisGame;
 public class Program {
 
     public static void main(String[] args) {
-        AegisGame game = new AegisGame("My Game", 10);
+        AegisGame game = new AegisGame("My Game", 30);
+
+        game.set(new GameSceneManager());
+        game.getScenes().addScene(new DebugScene("DEBUG: MY GAME", game.getTimeKeeper()));
         game.start();
     }
 }

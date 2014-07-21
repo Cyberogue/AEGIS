@@ -141,8 +141,6 @@ public class GameWindow extends JFrame {
         setVisible(false);
 
         // PRINT THE GRAPHICAL CONFIG
-        System.out.println(config.toString());
-
         // MAKE THE WINDOW FULLSCREEN IF REQUIRED
         if (config.isFullscreen() && gd.isFullScreenSupported()) {
             setSize(tk.getScreenSize().width, tk.getScreenSize().height);     // CHANGE THE WINDOW SIZE

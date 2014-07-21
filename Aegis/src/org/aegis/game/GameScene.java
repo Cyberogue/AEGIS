@@ -44,6 +44,7 @@ public abstract class GameScene {
      */
     public GameScene(String sceneID) {
         this.sceneID = sceneID;
+        this.state = SceneState.INITIALIZING;
     }
 
     /**

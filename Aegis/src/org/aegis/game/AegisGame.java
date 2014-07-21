@@ -134,7 +134,6 @@ public class AegisGame implements java.lang.Runnable {
 
     @Override
     public final void run() {
-        System.out.println(timer);
         // FIRST RUN THE INPUT MONITORS TO CHECK FOR NEW INPUTS
         input.update();
         // THEN RUN CUSTOM GAME CODE
@@ -157,5 +156,25 @@ public class AegisGame implements java.lang.Runnable {
         SystemMissingException() {
             super();
         }
+    }
+
+    public GameResourceManager getResources() {
+        return resources;
+    }
+
+    public GameSceneManager getScenes() {
+        return scenemanager;
+    }
+
+    public GameGraphics getGraphics() {
+        return graphics;
+    }
+
+    public GameInputMonitor getInput() {
+        return input;
+    }
+
+    public TimeKeeper getTimeKeeper() {
+        return timer;
     }
 }

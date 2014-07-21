@@ -24,6 +24,7 @@
 package org.aegis.game;
 
 import java.util.HashMap;
+import org.aegis.game.GameScene.SceneState;
 
 /**
  * Container class which holds all of the game's different scenes, switching
@@ -52,6 +53,59 @@ public class GameSceneManager implements RuntimeSystem {
 
     @Override
     public final void update() {
-       
+        if (currentScene == null) {
+            return;
+        } else if (currentScene.state == SceneState.TERMINATING) {
+            currentScene = nextScene;
+            currentScene.state = SceneState.INITIALIZING;
+        }
+        switch (currentScene.state) {
+            case INITIALIZING:
+                currentScene.onSceneEnter();
+                break;
+            case RUNNING:
+                currentScene.update();
+                break;
+            case TERMINATING:
+                currentScene.state = SceneState.TERMINATING;
+                currentScene.onSceneExit();
+                currentScene.state = SceneState.STOPPED;
+                nextScene.state = SceneState.INITIALIZING;
+                break;
+            case PAUSED:
+                currentScene.paused();
+                break;
+            case STOPPED:
+                // THIS SHOULDN'T HAPPEN, SOMETHING WENT TERRIBLY WRONG
+                throw new ThisShouldNotHappenException();
+        }
     }
+
+    public void addScene(GameScene scene, String sceneID) {
+        if (currentScene == null) {
+            currentScene = scene;
+        }
+        scenes.put(sceneID, scene);
+    }
+
+    public void addScene(GameScene scene) {
+        if (currentScene == null) {
+            currentScene = scene;
+        }
+        scenes.put(scene.getSceneID(), scene);
+    }
+
+    public void setNext(String sceneID) {
+        currentScene.state = SceneState.TERMINATING;
+        nextScene = scenes.get(sceneID);
+    }
+
+    public void forceSwitchTo(String sceneID) {
+        currentScene = scenes.get(sceneID);
+    }
+
+    public class ThisShouldNotHappenException extends RuntimeException {
+
+    }
+
 }
