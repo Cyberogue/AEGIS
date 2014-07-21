@@ -23,11 +23,17 @@
  */
 package org.aegis.ui;
 
+import org.aegis.game.AegisGame;
+
 /**
  *
  * @author Rogue <Alice Q.>
  */
-public class StaticSprite extends RenderItem {
+public class Sprite extends RenderItem {
+
+    public void update(AegisGame game) {
+
+    }
 
     @Override
     public void render(GameGraphics g) {

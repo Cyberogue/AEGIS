@@ -23,24 +23,27 @@
  */
 package org.aegis.test;
 
+import org.aegis.game.AegisGame;
 import org.aegis.game.TimeKeeper;
+import org.aegis.ui.RenderItem;
 
 /**
  *
  * @author Rogue <Alice Q>
  */
 public class DebugScene extends org.aegis.game.GameScene {
-
-    private TimeKeeper tk;
+    
     private final static java.util.Random rand = new java.util.Random();
-
-    public DebugScene(String sceneID, TimeKeeper tk) {
-        super(sceneID);
-        this.tk = tk;
+    
+    public DebugScene(AegisGame game, String sceneID) {
+        super(game, sceneID);
     }
-
+    
     @Override
     public void update() {
-        System.out.println(this + "\t" + tk.toString());
+        System.out.println(this + "\t" + game.getTimeKeeper());
+        
+        RenderItem debugItem = game.getResources().getRenderItems().get(0);
+        game.getGraphics().addToGameRenderList(debugItem);
     }
 }

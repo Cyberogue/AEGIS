@@ -27,13 +27,16 @@ import java.util.HashMap;
 import org.aegis.game.GameScene.SceneState;
 
 /**
- * Container class which holds all of the game's different scenes, switching
+ * Managerial class which holds all of the game's different scenes, switching
  * between them as required. This allows an user implementation to readily
  * switch between and execute different sets of runtime code.
  *
  * @author Rogue <Alice Q.>
  */
 public class GameSceneManager implements RuntimeSystem {
+
+    // KEEP A REFERENCE TO THE RESPECTIVE GAME THIS IS FOR
+    private AegisGame game;
 
     // MAP OF ALL THE DIFFERENT SCENES IN THE GAME
     private HashMap<String, GameScene> scenes;
@@ -46,11 +49,18 @@ public class GameSceneManager implements RuntimeSystem {
 
     /**
      * Constructor
+     *
+     * @param game the AegisGame this system is for
      */
-    public GameSceneManager() {
+    public GameSceneManager(AegisGame game) {
+        this.game = game;
         scenes = new HashMap();
     }
 
+    /**
+     * Main update method which simply passes the call onto the appropriate
+     * scene and method
+     */
     @Override
     public final void update() {
 
@@ -74,17 +84,28 @@ public class GameSceneManager implements RuntimeSystem {
                 break;
             case STOPPED:
                 // THIS SHOULDN'T HAPPEN, SOMETHING WENT TERRIBLY WRONG
-                throw new ThisShouldNotHappenException();
+                throw new java.lang.IllegalStateException("A STOPPED SCENE SHOULD NOT RUN");
         }
     }
 
-    public void addScene(GameScene scene, String sceneID) {
+    /**
+     * Adds a GameScene to the manager under an user-specified key
+     *
+     * @param key an unique key to identify the scene with
+     * @param scene the GameScene to add
+     */
+    public void addScene(GameScene scene, String key) {
         if (currentScene == null) {
             currentScene = scene;
         }
-        scenes.put(sceneID, scene);
+        scenes.put(key, scene);
     }
 
+    /**
+     * Adds a GameScene to the manager using its SceneID as the key
+     *
+     * @param scene the GameScene to add
+     */
     public void addScene(GameScene scene) {
         if (currentScene == null) {
             currentScene = scene;
@@ -92,17 +113,35 @@ public class GameSceneManager implements RuntimeSystem {
         scenes.put(scene.getSceneID(), scene);
     }
 
+    /**
+     * Readies the next GameScene for a standard transition between the two
+     * which allows
+     *
+     * @param sceneID the ID of the next scene to go to
+     */
     public void setNext(String sceneID) {
         currentScene.state = SceneState.EXIT;
         nextScene = scenes.get(sceneID);
     }
 
-    public void forceSwitchTo(String sceneID) {
+    /**
+     * Forces the next GameScene on the next frame, starting at the
+     * initialization method (Which defaults to the standard update method
+     * unless it is overwritten)
+     *
+     * @param sceneID the ID of the next scene to go to
+     */
+    public void forceNext(String sceneID) {
         currentScene = scenes.get(sceneID);
+        currentScene.state = SceneState.ENTER;
     }
 
-    public class ThisShouldNotHappenException extends RuntimeException {
-
+    /**
+     * Returns the currently active scene
+     *
+     * @return the currently active scene
+     */
+    public GameScene getCurrentScene() {
+        return currentScene;
     }
-
 }

@@ -23,6 +23,7 @@
  */
 package org.aegis.test;
 
+import org.aegis.ui.GameGraphics;
 import org.aegis.ui.RenderItem;
 
 /**
@@ -34,7 +35,7 @@ import org.aegis.ui.RenderItem;
 public class DebugRenderItem extends RenderItem {
 
     @Override
-    public void render() {
+    public void render(GameGraphics g) {
         System.out.println("RENDER " + this);
     }
 }

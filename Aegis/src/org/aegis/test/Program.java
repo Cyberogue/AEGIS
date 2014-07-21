@@ -25,6 +25,7 @@ package org.aegis.test;
 
 import org.aegis.data.GameResourceManager;
 import org.aegis.game.AegisGame;
+import org.aegis.game.GameScene;
 import org.aegis.game.GameSceneManager;
 
 /**
@@ -37,28 +38,13 @@ public class Program {
     public static void main(String[] args) {
         AegisGame game = new AegisGame("My Game", 1.0f);
 
-        game.set(new GameSceneManager());
-        game.getScenes().addScene(new DebugScene("DEBUG", game.getTimeKeeper()));
+        GameScene debugScene = new DebugScene(game, "DEBUG");
+        game.getScenes().addScene(debugScene);
 
-        game.set(new GameResourceManager());
         for (int i = 0; i < 1000; i++) {
             game.getResources().load("ITEM" + i, new DebugRenderItem());
         }
 
-        System.out.println(game.getResources().getRenderItems().size());
-
-        long start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
-            game.getResources().getRenderItems().get("ITEM" + (i % 1000));
-        }
-        System.out.println(System.currentTimeMillis() - start);
-
-        start = System.currentTimeMillis();
-        for (int i = 0; i < 100000; i++) {
-            game.getResources().getRenderItems().get(i % 1000);
-        }
-        System.out.println(System.currentTimeMillis() - start);
-
-        //   game.start();
+        game.start();
     }
 }

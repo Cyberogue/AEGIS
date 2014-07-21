@@ -63,6 +63,11 @@ public class AegisGame implements java.lang.Runnable {
     public AegisGame(String name) {
         this.timer = new TimeKeeper(this);
         this.name = name;
+
+        graphics = new GameGraphics();
+        scenemanager = new GameSceneManager(this);
+        input = new GameInputMonitor();
+        resources = new GameResourceManager();
     }
 
     /**
@@ -75,6 +80,11 @@ public class AegisGame implements java.lang.Runnable {
     public AegisGame(String name, float targetFramerate) {
         this.timer = new TimeKeeper(this, targetFramerate);
         this.name = name;
+
+        graphics = new GameGraphics();
+        scenemanager = new GameSceneManager(this);
+        input = new GameInputMonitor();
+        resources = new GameResourceManager();
     }
 
     /**
@@ -123,7 +133,7 @@ public class AegisGame implements java.lang.Runnable {
             graphics = new GameGraphics();
         }
         if (scenemanager == null) {
-            scenemanager = new GameSceneManager();
+            scenemanager = new GameSceneManager(this);
         }
         if (input == null) {
             input = new GameInputMonitor();

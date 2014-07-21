@@ -34,17 +34,23 @@ public abstract class GameScene {
     // THE ID WHICH THE SCENE WILL USE
     private String sceneID;
 
+    // A REFERENCE TO THE CORRESPONDING GAME OBJECT
+    protected AegisGame game;
+
     // THE SCENE'S CURRENT STATE
     protected SceneState state;
 
     /**
      * Basic constructor
      *
+     * @param game the AegisGame this scene corresponds to, used for data access
+     * and retrieval
      * @param sceneID A string identifier to use for the scene
      */
-    public GameScene(String sceneID) {
+    public GameScene(AegisGame game, String sceneID) {
         this.sceneID = sceneID;
         this.state = SceneState.ENTER;
+        this.game = game;
     }
 
     /**
@@ -58,6 +64,8 @@ public abstract class GameScene {
      * Hook method for scene entry. Use this for things such as initializations
      * and GUI loading. By default (as in, when not overriden) this method
      * simply passes the call to the update() method
+     *
+     *
      */
     public void onSceneEnter() {
         update();
@@ -66,6 +74,7 @@ public abstract class GameScene {
     /**
      * Hook method for the main runnable code. This code is called once a game
      * loop
+     *
      */
     public abstract void update();
 
@@ -73,6 +82,7 @@ public abstract class GameScene {
      * Hook method for scene exit. This method is called before the scene is
      * swapped out. By default (as in, when not overriden) this method simply
      * passes the call to the update() method
+     *
      */
     public void onSceneExit() {
         update();
@@ -82,6 +92,7 @@ public abstract class GameScene {
      * Hook method for paused runnable code. This code is called once a game
      * loop when the game is paused. By default (as in, when not overriden) this
      * method simply passes the call to the update() method
+     *
      */
     public void paused() {
         update();
