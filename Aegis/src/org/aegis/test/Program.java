@@ -41,22 +41,21 @@ public class Program {
         game.getScenes().addScene(new DebugScene("DEBUG", game.getTimeKeeper()));
 
         game.set(new GameResourceManager());
-        for (int i = 0; i < 50; i++) {
-            game.getResources().loadResource("ITEM" + i, new DebugRenderItem());
+        for (int i = 0; i < 1000; i++) {
+            game.getResources().load("ITEM" + i, new DebugRenderItem());
         }
-        int index = game.getResources().loadResource("DEBUGITEM", new DebugRenderItem());
 
-        System.out.println(index + "\t" + game.getResources().size());
+        System.out.println(game.getResources().getRenderItems().size());
 
         long start = System.currentTimeMillis();
-        for (int i = 0; i < 1000000; i++) {
-            game.getResources().get("ITEM2");
+        for (int i = 0; i < 100000; i++) {
+            game.getResources().getRenderItems().get("ITEM" + (i % 1000));
         }
         System.out.println(System.currentTimeMillis() - start);
 
         start = System.currentTimeMillis();
-        for (int i = 0; i < 1000000; i++) {
-            game.getResources().get(2);
+        for (int i = 0; i < 100000; i++) {
+            game.getResources().getRenderItems().get(i % 1000);
         }
         System.out.println(System.currentTimeMillis() - start);
 

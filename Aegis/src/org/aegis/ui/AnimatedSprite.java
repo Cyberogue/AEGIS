@@ -24,18 +24,13 @@
 package org.aegis.ui;
 
 /**
- * Abstract container class for all items which are somehow renderable by the
- * AEGIS system
  *
  * @author Rogue <Alice Q.>
  */
-public abstract class RenderItem {
+public class AnimatedSprite extends RenderItem {
 
-    /**
-     * This method is called whenever the item gets rendered, so any
-     * render-specific code should go here
-     *
-     * @param g the GameGraphics to render with
-     */
-    public abstract void render(GameGraphics g);
+    @Override
+    public void render(GameGraphics g) {
+
+    }
 }

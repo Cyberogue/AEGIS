@@ -23,94 +23,40 @@
  */
 package org.aegis.data;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 import org.aegis.ui.RenderItem;
 
 /**
+ * Class responsible for loading and fetching all of the game's custom resources
  *
  * @author Rogue <Alice Q.>
  */
 public class GameResourceManager {
 
-    // LIST OF ALL THE PRELOADED RENDERITEMS. THESE ARE ARRANGED BY INDEX FOR FAST ACCESS
-    private List<RenderItem> items;
-
-    // MAP OF ALL THE KEY-VALUE PAIRINGS. THESE MUST REMAIN SYNCHRONIZED WITH ITEMS
-    private Map<String, Integer> keys;
+    // MAP OF ALL THE RENDER ITEMS
+    private DirectAccessMap<RenderItem> renderItems;
 
     /**
      * Constructor
      */
     public GameResourceManager() {
-        items = new ArrayList();
-        keys = new TreeMap();
+        renderItems = new DirectAccessMap();
     }
 
     /**
-     * Method to load a RenderItem into memory under a given key
+     * Method to load a RenderItem onto storage
      *
-     * @param key the identifying key to put the item under
-     * @param item the item to load
-     * @return the index the item was loaded under
+     * @param key the String key associated with the RenderItem
+     * @param item the RenderItem to load
+     * @return the index assigned to the RenderItem
      */
-    public int loadResource(String key, RenderItem item) {
-        int index = items.size();
-        items.add(index, item);
-        keys.put(key, index);
-        return index;
+    public int load(String key, RenderItem item) {
+        return renderItems.add(key, item);
     }
 
     /**
-     * Data retrieval method to get a RenderItem assigned to a String key.
-     * However, this method is much slower than get(int index), so this should
-     * only be used sparingly
-     *
-     * @param key the key the item is under
-     * @return the RenderItem stored under the key
+     * @return a DirectAccessMap of loaded RenderItems
      */
-    public RenderItem get(String key) {
-        int index = keys.get(key);
-        if (index < 0) {
-            return null;
-        } else {
-            return items.get(index);
-        }
-    }
-
-    /**
-     * Fast data retrieval method which retrieves an item at a specified index
-     *
-     * @param index the index the item is under
-     * @return the RenderItem stored at the provided index
-     */
-    public RenderItem get(int index) {
-        return items.get(index);
-    }
-
-    /**
-     * Searches for the corresponding index for a given key. Data retrieval
-     * using keys takes longer than direct retrieval so only use this when
-     * performance time isn't of high priority.
-     *
-     * @param key the key to find the corresponding index for
-     * @return the index belonging to the key, or -1 if none exists
-     */
-    public int keyToIndex(String key) {
-        Integer i = keys.get(key);
-        if (i == null) {
-            return -1;
-        } else {
-            return i;
-        }
-    }
-
-    /**
-     * @return the number of currently loaded items
-     */
-    public int size() {
-        return items.size();
+    public DirectAccessMap<RenderItem> getRenderItems() {
+        return renderItems;
     }
 }
