@@ -23,17 +23,16 @@
  */
 package org.aegis.ui;
 
+import org.aegis.data.GameResourceManager;
 import org.aegis.game.AegisGame;
 
 /**
+ * Class intended for repetitive use which maintains a single reference to a
+ * RenderItem and allows for fast direct access to it
  *
  * @author Rogue <Alice Q.>
  */
-public class Sprite extends RenderItem {
-
-    public void update(AegisGame game) {
-
-    }
+public class Sprite implements RenderItem {
 
     @Override
     public void render(GameGraphics g) {

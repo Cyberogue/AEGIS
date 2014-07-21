@@ -27,6 +27,7 @@ import org.aegis.data.GameResourceManager;
 import org.aegis.game.AegisGame;
 import org.aegis.game.GameScene;
 import org.aegis.game.GameSceneManager;
+import org.aegis.ui.RenderList;
 
 /**
  * Simple test program for running simple test cases
@@ -41,9 +42,13 @@ public class Program {
         GameScene debugScene = new DebugScene(game, "DEBUG");
         game.getScenes().addScene(debugScene);
 
-        for (int i = 0; i < 1000; i++) {
-            game.getResources().load("ITEM" + i, new DebugRenderItem());
+        game.getResources().load("ITEM", new DebugRenderItem());
+
+        RenderList list = new RenderList(1000, false);
+        for (int i = 0; i < 5; i++) {
+            list.add(new DebugRenderItem());
         }
+        game.getResources().load("LIST", list);
 
         game.start();
     }

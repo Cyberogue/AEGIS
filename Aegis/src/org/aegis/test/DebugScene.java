@@ -32,18 +32,20 @@ import org.aegis.ui.RenderItem;
  * @author Rogue <Alice Q>
  */
 public class DebugScene extends org.aegis.game.GameScene {
-    
+
     private final static java.util.Random rand = new java.util.Random();
-    
+
     public DebugScene(AegisGame game, String sceneID) {
         super(game, sceneID);
     }
-    
+
     @Override
     public void update() {
         System.out.println(this + "\t" + game.getTimeKeeper());
+
+        int index = game.getResources().getRenderItems().indexOf("LIST");
+        RenderItem debugItem = game.getResources().getRenderItems().get(index);
         
-        RenderItem debugItem = game.getResources().getRenderItems().get(0);
         game.getGraphics().addToGameRenderList(debugItem);
     }
 }

@@ -32,7 +32,7 @@ import org.aegis.ui.RenderItem;
  *
  * @author Rogue <Alice Q.>
  */
-public class DebugRenderItem extends RenderItem {
+public class DebugRenderItem implements RenderItem {
 
     @Override
     public void render(GameGraphics g) {

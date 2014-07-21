@@ -27,7 +27,7 @@ package org.aegis.ui;
  *
  * @author Rogue <Alice Q.>
  */
-public class AnimatedSprite extends RenderItem {
+public class AnimatedSprite extends Sprite {
 
     @Override
     public void render(GameGraphics g) {
