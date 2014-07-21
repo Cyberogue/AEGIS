@@ -23,7 +23,11 @@
  */
 package org.aegis.data;
 
-import org.aegis.game.RuntimeSystem;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import org.aegis.ui.RenderItem;
 
 /**
  *
@@ -31,4 +35,82 @@ import org.aegis.game.RuntimeSystem;
  */
 public class GameResourceManager {
 
+    // LIST OF ALL THE PRELOADED RENDERITEMS. THESE ARE ARRANGED BY INDEX FOR FAST ACCESS
+    private List<RenderItem> items;
+
+    // MAP OF ALL THE KEY-VALUE PAIRINGS. THESE MUST REMAIN SYNCHRONIZED WITH ITEMS
+    private Map<String, Integer> keys;
+
+    /**
+     * Constructor
+     */
+    public GameResourceManager() {
+        items = new ArrayList();
+        keys = new TreeMap();
+    }
+
+    /**
+     * Method to load a RenderItem into memory under a given key
+     *
+     * @param key the identifying key to put the item under
+     * @param item the item to load
+     * @return the index the item was loaded under
+     */
+    public int loadResource(String key, RenderItem item) {
+        int index = items.size();
+        items.add(index, item);
+        keys.put(key, index);
+        return index;
+    }
+
+    /**
+     * Data retrieval method to get a RenderItem assigned to a String key.
+     * However, this method is much slower than get(int index), so this should
+     * only be used sparingly
+     *
+     * @param key the key the item is under
+     * @return the RenderItem stored under the key
+     */
+    public RenderItem get(String key) {
+        int index = keys.get(key);
+        if (index < 0) {
+            return null;
+        } else {
+            return items.get(index);
+        }
+    }
+
+    /**
+     * Fast data retrieval method which retrieves an item at a specified index
+     *
+     * @param index the index the item is under
+     * @return the RenderItem stored at the provided index
+     */
+    public RenderItem get(int index) {
+        return items.get(index);
+    }
+
+    /**
+     * Searches for the corresponding index for a given key. Data retrieval
+     * using keys takes longer than direct retrieval so only use this when
+     * performance time isn't of high priority.
+     *
+     * @param key the key to find the corresponding index for
+     * @return the index belonging to the key, or -1 if none exists
+     */
+    public int keyToIndex(String key) {
+        Integer i = keys.get(key);
+        if (i == null) {
+            return -1;
+        } else {
+            return i;
+        }
+    }
+
+    /**
+     * @return the number of currently loaded items
+     */
+    public int size() {
+        return items.size();
+    }
 }

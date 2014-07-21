@@ -63,6 +63,7 @@ public class AegisGame implements java.lang.Runnable {
     public AegisGame(String name) {
         this.timer = new TimeKeeper(this);
         this.name = name;
+        AegisGame.GLOBAL = this;
     }
 
     /**
@@ -75,6 +76,7 @@ public class AegisGame implements java.lang.Runnable {
     public AegisGame(String name, float targetFramerate) {
         this.timer = new TimeKeeper(this, targetFramerate);
         this.name = name;
+        AegisGame.GLOBAL = this;
     }
 
     /**

@@ -21,15 +21,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.ui;
+package org.aegis.test;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
+import org.aegis.ui.RenderItem;
 
 /**
+ * Simple RenderItem used for debugging which simply prints its name to output
+ * when rendered
  *
  * @author Rogue <Alice Q.>
  */
-public class RenderList extends LinkedList<RenderItem> {
+public class DebugRenderItem extends RenderItem {
 
+    @Override
+    public void render() {
+        System.out.println("RENDER " + this);
+    }
 }

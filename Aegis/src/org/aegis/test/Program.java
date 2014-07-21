@@ -23,6 +23,7 @@
  */
 package org.aegis.test;
 
+import org.aegis.data.GameResourceManager;
 import org.aegis.game.AegisGame;
 import org.aegis.game.GameSceneManager;
 
@@ -36,27 +37,29 @@ public class Program {
     public static void main(String[] args) {
         AegisGame game = new AegisGame("My Game", 1.0f);
 
-        try {
-            game.set(new GameSceneManager());
-            game.getScenes().addScene(new DebugScene("DEBUG1", game.getTimeKeeper()));
-            game.getScenes().addScene(new DebugScene("DEBUG2", game.getTimeKeeper()));
-            game.getScenes().addScene(new DebugScene("DEBUG3", game.getTimeKeeper()));
-            game.getScenes().addScene(new DebugScene("DEBUG4", game.getTimeKeeper()));
-            game.start();
+        game.set(new GameSceneManager());
+        game.getScenes().addScene(new DebugScene("DEBUG", game.getTimeKeeper()));
 
-            while (true) {
-                Thread.sleep(5000);
-                game.getScenes().setNext("DEBUG2");
-                Thread.sleep(5000);
-                game.getScenes().setNext("DEBUG3");
-                Thread.sleep(5000);
-                game.getScenes().setNext("DEBUG4");
-                Thread.sleep(5000);
-                game.getScenes().setNext("DEBUG1");
-            }
-
-        } catch (InterruptedException ex) {
-
+        game.set(new GameResourceManager());
+        for (int i = 0; i < 50; i++) {
+            game.getResources().loadResource("ITEM" + i, new DebugRenderItem());
         }
+        int index = game.getResources().loadResource("DEBUGITEM", new DebugRenderItem());
+
+        System.out.println(index + "\t" + game.getResources().size());
+
+        long start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            game.getResources().get("ITEM2");
+        }
+        System.out.println(System.currentTimeMillis() - start);
+
+        start = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            game.getResources().get(2);
+        }
+        System.out.println(System.currentTimeMillis() - start);
+
+        //   game.start();
     }
 }
