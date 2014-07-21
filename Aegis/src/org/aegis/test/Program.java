@@ -34,7 +34,7 @@ import org.aegis.game.GameSceneManager;
 public class Program {
 
     public static void main(String[] args) {
-        AegisGame game = new AegisGame("My Game", 0.5f);
+        AegisGame game = new AegisGame("My Game", 1.0f);
 
         try {
             game.set(new GameSceneManager());
@@ -44,14 +44,16 @@ public class Program {
             game.getScenes().addScene(new DebugScene("DEBUG4", game.getTimeKeeper()));
             game.start();
 
-            Thread.sleep(5000);
-            game.getScenes().setNext("DEBUG2");
-            Thread.sleep(5000);
-            game.getScenes().setNext("DEBUG3");
-            Thread.sleep(5000);
-            game.getScenes().setNext("DEBUG4");
-            Thread.sleep(5000);
-            game.getScenes().setNext("DEBUG1");
+            while (true) {
+                Thread.sleep(5000);
+                game.getScenes().setNext("DEBUG2");
+                Thread.sleep(5000);
+                game.getScenes().setNext("DEBUG3");
+                Thread.sleep(5000);
+                game.getScenes().setNext("DEBUG4");
+                Thread.sleep(5000);
+                game.getScenes().setNext("DEBUG1");
+            }
 
         } catch (InterruptedException ex) {
 

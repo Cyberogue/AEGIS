@@ -63,7 +63,6 @@ public class GameSceneManager implements RuntimeSystem {
                 currentScene.update();
                 break;
             case EXIT:
-                currentScene.state = SceneState.EXIT;
                 currentScene.onSceneExit();
                 currentScene.state = SceneState.STOPPED;
 

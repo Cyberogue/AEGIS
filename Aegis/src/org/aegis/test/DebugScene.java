@@ -40,23 +40,7 @@ public class DebugScene extends org.aegis.game.GameScene {
     }
 
     @Override
-    public void onSceneEnter() {
-        System.out.println("Enter\t" + toString() + "\t" + tk.toString());
-    }
-
-    @Override
     public void update() {
         System.out.println("Update\t" + toString() + "\t" + tk.toString());
     }
-
-    @Override
-    public void onSceneExit() {
-        System.out.println("Exit\t" + toString() + "\t" + tk.toString());
-    }
-
-    @Override
-    public void paused() {
-        System.out.println("Paused\t" + toString() + "\t" + tk.toString());
-    }
-
 }
