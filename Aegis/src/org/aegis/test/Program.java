@@ -21,14 +21,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis;
+package org.aegis.test;
+
+import org.aegis.game.AegisGame;
 
 /**
- * The different states a GameScene can be in
+ * Simple test program for running simple test cases
  *
  * @author Rogue <Alice Q>
  */
-public enum SceneState {
+public class Program {
 
-    INITIALIZING, RUNNING, TERMINATING, PAUSED, STOPPED
+    public static void main(String[] args) {
+        AegisGame game = new AegisGame("My Game", 10);
+        game.start();
+    }
 }

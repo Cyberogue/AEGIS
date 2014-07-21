@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis;
+package org.aegis.game;
 
 /**
  * Decorative class meant to run a Runnable object at a specified rate and
@@ -29,7 +29,7 @@ package org.aegis;
  *
  * @author Rogue <Alice Q>
  */
-public class Synchronizer extends java.lang.Thread {
+public class TimeKeeper implements java.lang.Runnable {
 
     // DEFAULT FRAMERATES
     public final static float FRAMERATE_ONE = 1.0f;
@@ -54,13 +54,16 @@ public class Synchronizer extends java.lang.Thread {
     private long averageRuntime;   // USED TO STORE A RUNNING AVERAGE OF THE RUNTIME IN MILLIS
     private long framenumber = 1;
 
+    // SELF-EXPANATORY
+    private boolean isRunning;
+
     /**
      * Simple constructor set to FRAMERATE_LOW
      *
      * @param syncedObject The Synchronizable object to run at a synchronized
      * rate
      */
-    public Synchronizer(Runnable syncedObject) {
+    public TimeKeeper(Runnable syncedObject) {
         this(syncedObject, FRAMERATE_LOW);
     }
 
@@ -71,7 +74,7 @@ public class Synchronizer extends java.lang.Thread {
      * rate
      * @param targetFramerate The child frame rate
      */
-    public Synchronizer(Runnable syncedObject, float targetFramerate) {
+    public TimeKeeper(Runnable syncedObject, float targetFramerate) {
         if (targetFramerate <= 0.0f) {
             throw new IllegalArgumentException("Framerate must be positive and non-zero");
         }
@@ -81,40 +84,8 @@ public class Synchronizer extends java.lang.Thread {
         this.targetFramerate = targetFramerate;
         this.targetMillis = (long) (1000 / targetFramerate);
         this.unlockedFramerate = false;
-
-        this.setDaemon(true);
+        this.isRunning = false;
     }
-
-    // SETTERS
-    // - unlockFramerate
-    // - lockFramerate
-    /**
-     * Used to lock the framerate
-     *
-     * @param newFramerate The new framerate
-     */
-    public void lockFramerate(float newFramerate) {
-        if (newFramerate <= 0.0f) {
-            throw new IllegalArgumentException("Framerate must be positive and non-zero");
-        }
-
-        this.targetFramerate = newFramerate;
-        this.targetMillis = (long) (1000 / newFramerate);
-        this.unlockedFramerate = false;
-    }
-
-    /**
-     * Used to unlock the framerate. Note that a target framerate is still
-     * required.
-     *
-     * @param framerate A framerate to use for calculating statistics
-     */
-    public void unlockFramerate(float framerate) {
-        this.targetFramerate = framerate;
-        this.targetMillis = (long) (1000 / targetFramerate);
-        this.unlockedFramerate = true;
-    }
-
     // GETTERS
     // - getTargetFramerate
     // - isUnlocked
@@ -181,31 +152,61 @@ public class Synchronizer extends java.lang.Thread {
         return framenumber;
     }
 
-    // CONCURRENCY
+    // MAIN USAGE METHODS
     // - requestPause
     // - releasePause
+    // - start
+    // - end
+    // - lockFramerate
+    // - unlockFramerate
+    // - isPaused
+    // - isRunning
+    // TODO rewrite requestPause and requestUnpause methods
     /**
-     * Pauses the Synchronized object on the next game loop call
+     * Method to start the timer running
      */
-    public void requestPause() {
-        sem_pause++;
+    public void start() {
+        isRunning = true;
+        Thread thread = new Thread(this);
+        thread.setPriority(Thread.MAX_PRIORITY);
+        thread.start();
     }
 
     /**
-     * Releases a pause request on the Synchronized object. The Synchronized
-     * object will remain paused until all pause requests are released.
+     * Method which allows the timing system to safely end the next time it can
      */
-    public synchronized void releasePause() {
-        if (sem_pause > 0) {
-            sem_pause--;
+    public void endAfterFrame() {
+        isRunning = false;
+    }
+
+    /**
+     * Used to lock the framerate
+     *
+     * @param newFramerate The new framerate
+     */
+    public void lockFramerate(float newFramerate) {
+        if (newFramerate <= 0.0f) {
+            throw new IllegalArgumentException("Framerate must be positive and non-zero");
         }
-        super.notify();
+
+        this.targetFramerate = newFramerate;
+        this.targetMillis = (long) (1000 / newFramerate);
+        this.unlockedFramerate = false;
     }
 
-    public boolean isPaused() {
-        return sem_pause > 0;
+    /**
+     * Used to unlock the framerate. Note that a target framerate is still
+     * required.
+     *
+     * @param framerate A framerate to use for calculating statistics
+     */
+    public void unlockFramerate(float framerate) {
+        this.targetFramerate = framerate;
+        this.targetMillis = (long) (1000 / targetFramerate);
+        this.unlockedFramerate = true;
     }
 
+    // TODO rerwite pause shit and isPaused()
     // OVERWRITTEN METHODS
     // - run()
     // - toString()
@@ -215,14 +216,14 @@ public class Synchronizer extends java.lang.Thread {
      * suspend on pause statements
      */
     @Override
-    public void run() {
+    public final void run() {
         // SET SOME INITIAL VALUES IN CASE OF READ
         lastRuntime = targetMillis;
         averageRuntime = lastRuntime;
         performance = 1.0f;
 
         // AND RUN MAIN
-        while (true) {
+        while (isRunning) {
             // SUSPEND AT THIS CALL IF PAUSED
             runSynced();
         }

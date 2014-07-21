@@ -23,15 +23,13 @@
  */
 package org.aegis2d;
 
-import java.awt.Frame;
 import java.awt.Toolkit;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
-import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
-import org.aegis.Synchronizer;
+import org.aegis.game.TimeKeeper;
 
 /**
  * Custom JFrame to contain the main game window
@@ -43,9 +41,6 @@ public class GameWindow extends JFrame {
     // STORAGE OBJECT CONTAINING THE WINDOW'S CONFIGURATION
     private WindowConfig config;
 
-    // REFERENCE TO THE SYNCHRONIZER DOING THE GRAPHICS UPDATING
-    private Synchronizer timer;
-
     // GRAPHICS DEVICE
     private GraphicsDevice gd;
 
@@ -55,18 +50,15 @@ public class GameWindow extends JFrame {
     /**
      * Basic constructor
      *
-     * @param timer The Synchronizer object used to update the window rendering
      * @param title The title to display on the game's window
      * @param width The initial width
      * @param height The initial height
      */
-    public GameWindow(String title, int width, int height, Synchronizer timer) {
+    public GameWindow(String title, int width, int height) {
         super(title);
 
         this.gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
         this.tk = Toolkit.getDefaultToolkit();
-
-        this.timer = timer;
         this.config = new WindowConfig(width, height);
 
         setSize(width, height);
@@ -145,9 +137,6 @@ public class GameWindow extends JFrame {
      * Applies any changes set into the game window's configuration
      */
     public void applyChanges() {
-        // PAUSE THE TIMER TO PREVENT UNWANTED UPDATES
-        timer.requestPause();
-
         // HIDE THE WINDOW TO APPLY CHANGES
         setVisible(false);
 
@@ -179,9 +168,6 @@ public class GameWindow extends JFrame {
         } catch (InterruptedException ex) {
 
         }
-
-        // UNPAUSE THE TIMER
-        timer.releasePause();
 
         // SHOW THE WINDOW
         setVisible(true);

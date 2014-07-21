@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis;
+package org.aegis.game;
 
 /**
  * Abstract class providing the framework for separate game code for a single
@@ -33,6 +33,9 @@ public abstract class GameScene {
 
     // THE ID WHICH THE SCENE WILL USE
     private String sceneID;
+
+    // THE SCENE'S CURRENT STATE
+    protected SceneState state;
 
     /**
      * Basic constructor
@@ -52,9 +55,12 @@ public abstract class GameScene {
 
     /**
      * Hook method for scene entry. Use this for things such as initializations
-     * and GUI loading
+     * and GUI loading. By default (as in, when not overriden) this method
+     * simply passes the call to the update() method
      */
-    public abstract void onSceneEnter();
+    public void onSceneEnter() {
+        update();
+    }
 
     /**
      * Hook method for the main runnable code. This code is called once a game
@@ -64,15 +70,29 @@ public abstract class GameScene {
 
     /**
      * Hook method for scene exit. This method is called before the scene is
-     * swapped out
+     * swapped out. By default (as in, when not overriden) this method simply
+     * passes the call to the update() method
      */
-    public abstract void onSceneExit();
+    public void onSceneExit() {
+        update();
+    }
 
     /**
      * Hook method for paused runnable code. This code is called once a game
-     * loop when the game is paused.
+     * loop when the game is paused. By default (as in, when not overriden) this
+     * method simply passes the call to the update() method
      */
     public void paused() {
+        update();
+    }
 
+    /**
+     * The different states a GameScene can be in
+     *
+     * @author Rogue <Alice Q>
+     */
+    public enum SceneState {
+
+        INITIALIZING, RUNNING, TERMINATING, PAUSED, STOPPED
     }
 }

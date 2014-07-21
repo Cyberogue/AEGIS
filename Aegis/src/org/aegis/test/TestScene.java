@@ -23,13 +23,13 @@
  */
 package org.aegis.test;
 
-import org.aegis.Synchronizer;
+import org.aegis.game.TimeKeeper;
 
 /**
  *
  * @author Rogue <Alice Q>
  */
-public class TestScene extends org.aegis.GameScene {
+public class TestScene extends org.aegis.game.GameScene {
 
     private final static java.util.Random rand = new java.util.Random();
 

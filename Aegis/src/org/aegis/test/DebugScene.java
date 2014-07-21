@@ -23,18 +23,18 @@
  */
 package org.aegis.test;
 
-import org.aegis.Synchronizer;
+import org.aegis.game.TimeKeeper;
 
 /**
  *
  * @author Rogue <Alice Q>
  */
-public class DebugScene extends org.aegis.GameScene {
+public class DebugScene extends org.aegis.game.GameScene {
 
-    private Synchronizer tk;
+    private TimeKeeper tk;
     private final static java.util.Random rand = new java.util.Random();
 
-    public DebugScene(String sceneID, Synchronizer tk) {
+    public DebugScene(String sceneID, TimeKeeper tk) {
         super(sceneID);
         this.tk = tk;
     }
