@@ -43,9 +43,8 @@ public class DebugScene extends org.aegis.game.GameScene {
     public void update() {
         System.out.println(this + "\t" + game.getTimeKeeper());
 
-        int index = game.getResources().getRenderItems().indexOf("LIST");
-        RenderItem debugItem = game.getResources().getRenderItems().get(index);
-        
+        RenderItem debugItem = game.getResources().getRenderItems().get(0);
+
         game.getGraphics().addToGameRenderList(debugItem);
     }
 }

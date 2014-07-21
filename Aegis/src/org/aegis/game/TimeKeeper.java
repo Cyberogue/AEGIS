@@ -40,9 +40,12 @@ public class TimeKeeper implements java.lang.Runnable {
     // SYNCHRONIZED OBJECT
     private Runnable child;
 
+    // NANO-TIME WAIT
+    private boolean waitNanos;
+
     // TARGETS
     private float targetFramerate;
-    private long targetMillis;
+    private int targetNanos;    // NANOSECONDS TO WAIT
     private boolean unlockedFramerate;
 
     // SEMAPHORE FOR PAUSING
@@ -82,9 +85,10 @@ public class TimeKeeper implements java.lang.Runnable {
         child = syncedObject;
 
         this.targetFramerate = targetFramerate;
-        this.targetMillis = (long) (1000 / targetFramerate);
+        this.targetNanos = (int) (1000000000 / targetFramerate);
         this.unlockedFramerate = false;
         this.isRunning = false;
+        this.waitNanos = true;
     }
     // GETTERS
     // - getTargetFramerate
@@ -159,6 +163,7 @@ public class TimeKeeper implements java.lang.Runnable {
     // - end
     // - lockFramerate
     // - unlockFramerate
+    // - setNanoTimeout
     // - isPaused
     // - isRunning
     // TODO rewrite requestPause and requestUnpause methods
@@ -190,7 +195,7 @@ public class TimeKeeper implements java.lang.Runnable {
         }
 
         this.targetFramerate = newFramerate;
-        this.targetMillis = (long) (1000 / newFramerate);
+        this.targetNanos = (int) (1000000000 / newFramerate);
         this.unlockedFramerate = false;
     }
 
@@ -202,8 +207,19 @@ public class TimeKeeper implements java.lang.Runnable {
      */
     public void unlockFramerate(float framerate) {
         this.targetFramerate = framerate;
-        this.targetMillis = (long) (1000 / targetFramerate);
+        this.targetNanos = (int) (1000000000 / targetFramerate);
         this.unlockedFramerate = true;
+    }
+
+    /**
+     * Use this method to wait for a slight moment after each frame using a
+     * CPU-heavy loop. This may provide better framerate precision but at the
+     * cost of slightly higher CPU usage
+     *
+     * @param on true in order to wait for nanosecond precision, false otherwise
+     */
+    public void setNanoTimeout(boolean on) {
+        this.waitNanos = on;
     }
 
     // TODO rerwite pause shit and isPaused()
@@ -218,7 +234,7 @@ public class TimeKeeper implements java.lang.Runnable {
     @Override
     public final void run() {
         // SET SOME INITIAL VALUES IN CASE OF READ
-        lastRuntime = targetMillis;
+        lastRuntime = targetNanos;
         averageRuntime = lastRuntime;
         performance = 1.0f;
 
@@ -240,28 +256,39 @@ public class TimeKeeper implements java.lang.Runnable {
         }
 
         // GET THE START TIME
-        long startTime = System.currentTimeMillis();
+        long startTime = System.nanoTime();
 
         // PASS ON THE METHOD TO THE CHILD WHILE OBSERVING STATISTICS
         child.run();
 
         // GET THE DELTA TIME AND FIND THE WAIT TIME
-        long stopTime = System.currentTimeMillis();
-        long delta = targetMillis - (stopTime - startTime);
+        long stopTime = System.nanoTime();
+        long delta = targetNanos - (stopTime - startTime); // TOTAL IN NANOSECONDS
+        long currentTime = stopTime;
 
         // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
         if (delta > 0 && !unlockedFramerate) {
             try {
-                Thread.sleep(delta);
+                Thread.sleep(delta / 1000000);
+
+                // THIS PART IS CPU HEAVY BUT RELATIVELY SHORT COMPARED TO THE LONGER SLEEP
+                if (waitNanos) {
+                    while (currentTime <= stopTime + (delta % 1000000) + 500000) {
+                        // DO NOTHING \o/
+                        currentTime = System.nanoTime();
+                    }
+                }
+
+                // JUST DO A SIMPLE LOOP FOR THE NANOSECONDS
             } catch (InterruptedException ex) {
             }
         }
 
         // CALCULATE STATISTICS AND FINISH UP
-        long runtime = System.currentTimeMillis() - startTime;
+        long runtime = System.nanoTime() - startTime;
 
         averageRuntime = (lastRuntime + runtime) / 2;
-        performance = (float) runtime / targetMillis;
+        performance = (float) runtime / targetNanos;
         lastRuntime = runtime;
         framenumber++;
     }
@@ -271,6 +298,6 @@ public class TimeKeeper implements java.lang.Runnable {
      */
     @Override
     public String toString() {
-        return String.format("[%06d]\t[%4.2f%c\t% 8.2f\t%.3f]", framenumber, targetFramerate, (unlockedFramerate ? '+' : ' '), 1000.0f / averageRuntime, performance);
+        return String.format("[%06d]\t[%4.2f%c\t% 8.2f\t%.3f]", framenumber, targetFramerate, (unlockedFramerate ? '+' : ' '), 1000000000.0f / averageRuntime, performance);
     }
 }

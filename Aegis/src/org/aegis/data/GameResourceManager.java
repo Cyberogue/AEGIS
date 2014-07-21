@@ -43,7 +43,8 @@ public class GameResourceManager {
     }
 
     /**
-     * Method to load a RenderItem onto storage
+     * Method to load a RenderItem onto storage, assigning it to a specified
+     * unique key
      *
      * @param key the String key associated with the RenderItem
      * @param item the RenderItem to load
@@ -51,6 +52,16 @@ public class GameResourceManager {
      */
     public int load(String key, RenderItem item) {
         return renderItems.add(key, item);
+    }
+
+    /**
+     * Method to load a RenderItem onto storage
+     *
+     * @param item the RenderItem to load
+     * @return the index assigned to the RenderItem
+     */
+    public int load(RenderItem item) {
+        return renderItems.add(item);
     }
 
     /**
