@@ -44,7 +44,7 @@ public abstract class GameScene {
      */
     public GameScene(String sceneID) {
         this.sceneID = sceneID;
-        this.state = SceneState.INITIALIZING;
+        this.state = SceneState.ENTER;
     }
 
     /**
@@ -87,6 +87,11 @@ public abstract class GameScene {
         update();
     }
 
+    @Override
+    public String toString() {
+        return sceneID + '[' + state + ']';
+    }
+
     /**
      * The different states a GameScene can be in
      *
@@ -94,6 +99,6 @@ public abstract class GameScene {
      */
     public enum SceneState {
 
-        INITIALIZING, RUNNING, TERMINATING, PAUSED, STOPPED
+        ENTER, RUNNING, EXIT, PAUSED, STOPPED
     }
 }

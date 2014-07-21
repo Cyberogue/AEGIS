@@ -34,10 +34,27 @@ import org.aegis.game.GameSceneManager;
 public class Program {
 
     public static void main(String[] args) {
-        AegisGame game = new AegisGame("My Game", 30);
+        AegisGame game = new AegisGame("My Game", 0.5f);
 
-        game.set(new GameSceneManager());
-        game.getScenes().addScene(new DebugScene("DEBUG: MY GAME", game.getTimeKeeper()));
-        game.start();
+        try {
+            game.set(new GameSceneManager());
+            game.getScenes().addScene(new DebugScene("DEBUG1", game.getTimeKeeper()));
+            game.getScenes().addScene(new DebugScene("DEBUG2", game.getTimeKeeper()));
+            game.getScenes().addScene(new DebugScene("DEBUG3", game.getTimeKeeper()));
+            game.getScenes().addScene(new DebugScene("DEBUG4", game.getTimeKeeper()));
+            game.start();
+
+            Thread.sleep(5000);
+            game.getScenes().setNext("DEBUG2");
+            Thread.sleep(5000);
+            game.getScenes().setNext("DEBUG3");
+            Thread.sleep(5000);
+            game.getScenes().setNext("DEBUG4");
+            Thread.sleep(5000);
+            game.getScenes().setNext("DEBUG1");
+
+        } catch (InterruptedException ex) {
+
+        }
     }
 }

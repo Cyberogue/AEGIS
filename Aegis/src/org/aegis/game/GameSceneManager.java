@@ -53,24 +53,22 @@ public class GameSceneManager implements RuntimeSystem {
 
     @Override
     public final void update() {
-        if (currentScene == null) {
-            return;
-        } else if (currentScene.state == SceneState.TERMINATING) {
-            currentScene = nextScene;
-            currentScene.state = SceneState.INITIALIZING;
-        }
+
         switch (currentScene.state) {
-            case INITIALIZING:
+            case ENTER:
                 currentScene.onSceneEnter();
+                currentScene.state = SceneState.RUNNING;
                 break;
             case RUNNING:
                 currentScene.update();
                 break;
-            case TERMINATING:
-                currentScene.state = SceneState.TERMINATING;
+            case EXIT:
+                currentScene.state = SceneState.EXIT;
                 currentScene.onSceneExit();
                 currentScene.state = SceneState.STOPPED;
-                nextScene.state = SceneState.INITIALIZING;
+
+                currentScene = nextScene;
+                currentScene.state = SceneState.ENTER;
                 break;
             case PAUSED:
                 currentScene.paused();
@@ -96,7 +94,7 @@ public class GameSceneManager implements RuntimeSystem {
     }
 
     public void setNext(String sceneID) {
-        currentScene.state = SceneState.TERMINATING;
+        currentScene.state = SceneState.EXIT;
         nextScene = scenes.get(sceneID);
     }
 

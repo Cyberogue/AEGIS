@@ -72,7 +72,7 @@ public class AegisGame implements java.lang.Runnable {
      * @param name the game's title
      * @param targetFramerate the target framerate
      */
-    public AegisGame(String name, int targetFramerate) {
+    public AegisGame(String name, float targetFramerate) {
         this.timer = new TimeKeeper(this, targetFramerate);
         this.name = name;
     }
@@ -114,7 +114,9 @@ public class AegisGame implements java.lang.Runnable {
     }
 
     /**
-     * Method to start the game after the vital systems have been initialized
+     * Method to start the game after the vital systems have been initialized.
+     * If any system is missing this will substitute it with the absolute
+     * default.
      */
     public void start() {
         if (graphics == null) {
@@ -144,36 +146,36 @@ public class AegisGame implements java.lang.Runnable {
     }
 
     /**
-     * Runtime exception to be thrown whenever one of the game's vital systems
-     * is either non-existent or missing
+     * @return the resource content manager being used by the game
      */
-    public class SystemMissingException extends RuntimeException {
-
-        SystemMissingException(String message) {
-            super(message);
-        }
-
-        SystemMissingException() {
-            super();
-        }
-    }
-
     public GameResourceManager getResources() {
         return resources;
     }
 
+    /**
+     * @return the scene (custom game code) manager being used by the game
+     */
     public GameSceneManager getScenes() {
         return scenemanager;
     }
 
+    /**
+     * @return the graphical system being used by the game
+     */
     public GameGraphics getGraphics() {
         return graphics;
     }
 
+    /**
+     * @return the input monitor being used by the game
+     */
     public GameInputMonitor getInput() {
         return input;
     }
 
+    /**
+     * @return the time keeping object being used by the game
+     */
     public TimeKeeper getTimeKeeper() {
         return timer;
     }
