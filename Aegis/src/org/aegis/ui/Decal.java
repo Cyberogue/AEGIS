@@ -21,37 +21,57 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis2d;
+package org.aegis.ui;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import org.aegis.data.GameResourceManager;
-import org.aegis.game.AegisGame;
-import org.aegis.ui.GameGraphics;
-import org.aegis.ui.RenderItem;
 
 /**
- * RenderItem which simply contains a buffered image loaded from a file
+ * Immutable wrapper class for a BufferedImage allowing for RenderItem
+ * capabilities, which can be used to reduce memory usage by using single
+ * instances across multiple resources
  *
  * @author Rogue <Alice Q.>
  */
-public class StaticGraphic implements RenderItem {
+public class Decal implements RenderItem {
 
-    // THE MAIN BUFFEREDIMAGE
-    private BufferedImage image;
+    // THE IMAGE TO WRAP AROUND
+    private final BufferedImage image;
 
-    public StaticGraphic(String imageDir) throws IOException {
-        image = ImageIO.read(new File(imageDir));
-    }
-
-    public StaticGraphic(BufferedImage image) {
+    /**
+     * Basic constructor which creates an Decal wrapped around a BufferedImage
+     *
+     * @param image the BufferedImage to wrap around
+     */
+    public Decal(BufferedImage image) {
         this.image = image;
     }
 
-    @Override
-    public void render(GameGraphics g, float offsetX, float offsetY) {
+    /**
+     * Constructor which creates a Decal with the image data loaded from a file
+     *
+     * @param file a file containing data about the image
+     * @throws IOException when there is a problem reading the file, or the file
+     * contains invalid data
+     */
+    public Decal(File file) throws IOException {
+        this.image = ImageIO.read(file);
+    }
 
+    /**
+     * Returns the BufferedImage this is wrapped around
+     *
+     * @return the BufferedImage this is wrapped around
+     */
+    public BufferedImage getImage() {
+        return image;
+    }
+
+    @Override
+    public void render(Graphics g, float offsetX, float offsetY) {
+        g.drawImage(image, (int) offsetX, (int) offsetY, null);
     }
 }

@@ -21,11 +21,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.test;
+package org.aegis2d.test;
 
 import org.aegis.game.AegisGame;
 import org.aegis.game.GameScene;
 import org.aegis.ui.RenderList;
+import org.aegis2d.Aegis2DGame;
 
 /**
  * Simple test program for running simple test cases
@@ -35,19 +36,10 @@ import org.aegis.ui.RenderList;
 public class Program {
 
     public static void main(String[] args) {
-        AegisGame game = new AegisGame("My Game", 4.0f);
+        AegisGame game = new Aegis2DGame("My Game", 1024, 768, 4.0f);
 
         GameScene debugScene = new TestScene(game, "DEBUG");
         game.getScenes().addScene(debugScene);
-
-        game.getResources().load("ITEM", new DebugRenderItem());
-
-        RenderList list = new RenderList(1000);
-        for (int i = 0; i < 5; i++) {
-            list.add(new DebugRenderItem());
-        }
-        game.getResources().load("LIST", list);
-
         game.start();
     }
 }

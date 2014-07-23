@@ -23,6 +23,8 @@
  */
 package org.aegis.ui;
 
+import java.awt.Graphics;
+
 /**
  * Interface for all items which are somehow renderable by the AEGIS system
  *
@@ -34,9 +36,9 @@ public interface RenderItem {
      * This method is called whenever the item gets rendered, so any
      * render-specific code should go here
      *
-     * @param g the GameGraphics to render with
+     * @param g the Graphics to render with
      * @param offsetX the X offset to apply when rendering
-     * @param offsetY the Y offset to appyl when rendering
+     * @param offsetY the Y offset to apply when rendering
      */
-    public abstract void render(GameGraphics g, float offsetX, float offsetY);
+    public abstract void render(Graphics g, float offsetX, float offsetY);
 }

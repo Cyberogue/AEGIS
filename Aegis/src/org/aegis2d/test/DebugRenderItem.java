@@ -21,9 +21,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.test;
+package org.aegis2d.test;
 
-import org.aegis.ui.GameGraphics;
+import java.awt.Color;
+import java.awt.Graphics;
 import org.aegis.ui.RenderItem;
 
 /**
@@ -45,7 +46,10 @@ public class DebugRenderItem implements RenderItem {
     }
 
     @Override
-    public void render(GameGraphics g, float offsetX, float offsetY) {
+    public void render(Graphics g, float offsetX, float offsetY) {
+        g.setColor(Color.red);
+        g.fillRect((int) offsetX, (int) offsetY, 50, 50);
+
         System.out.println("RENDER " + name);
     }
 }

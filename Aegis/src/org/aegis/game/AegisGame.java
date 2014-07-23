@@ -23,9 +23,10 @@
  */
 package org.aegis.game;
 
+import java.awt.Canvas;
 import javax.swing.JFrame;
 import org.aegis.data.GameResourceManager;
-import org.aegis.ui.GameGraphics;
+import org.aegis2d.Aegis2DGraphics;
 import org.aegis.ui.GameInputMonitor;
 
 /**
@@ -45,7 +46,7 @@ public class AegisGame implements java.lang.Runnable {
     protected TimeKeeper timer;
 
     // GAMEGRAPHICS OBJECT
-    protected GameGraphics graphics;
+    protected Aegis2DGraphics graphics;
 
     // GAMESCENEMANAGER OBJECT
     protected GameSceneManager scenemanager;
@@ -64,11 +65,6 @@ public class AegisGame implements java.lang.Runnable {
     public AegisGame(String name) {
         this.timer = new TimeKeeper(this);
         this.name = name;
-
-        graphics = new GameGraphics(new JFrame());
-        scenemanager = new GameSceneManager(this);
-        input = new GameInputMonitor();
-        resources = new GameResourceManager();
     }
 
     /**
@@ -81,19 +77,14 @@ public class AegisGame implements java.lang.Runnable {
     public AegisGame(String name, float targetFramerate) {
         this.timer = new TimeKeeper(this, targetFramerate);
         this.name = name;
-
-        graphics = new GameGraphics(new JFrame());
-        scenemanager = new GameSceneManager(this);
-        input = new GameInputMonitor();
-        resources = new GameResourceManager();
     }
 
     /**
-     * Method to set a GameGraphics system for the game
+     * Method to set a Aegis2DGraphics system for the game
      *
      * @param graphics the graphics system to set
      */
-    public void set(GameGraphics graphics) {
+    public void set(Aegis2DGraphics graphics) {
         this.graphics = graphics;
     }
 
@@ -131,16 +122,13 @@ public class AegisGame implements java.lang.Runnable {
      */
     public void start() {
         if (graphics == null) {
-            graphics = new GameGraphics(new JFrame());
+            throw new SystemMissingException("The game's graphics system has not yet been initialized");
         }
         if (scenemanager == null) {
-            scenemanager = new GameSceneManager(this);
+            throw new SystemMissingException("The game's scene management system has not yet been initialized");
         }
         if (input == null) {
-            input = new GameInputMonitor();
-        }
-        if (resources == null) {
-            resources = new GameResourceManager();
+            throw new SystemMissingException("The game's input monitoring system has not yet been initialized");
         }
         timer.start();
     }
@@ -148,11 +136,40 @@ public class AegisGame implements java.lang.Runnable {
     @Override
     public final void run() {
         // FIRST RUN THE INPUT MONITORS TO CHECK FOR NEW INPUTS
-        input.update();
+        updateInputMonitor();
         // THEN RUN CUSTOM GAME CODE
-        scenemanager.update();
-        // FOLLOWED BY ANY INTERNAL SYSTEMS SUCH AS PHYSICS (TODO)
+        updateGameCode();
+        // FOLLOWED BY ANY INTERNAL SYSTEMS SUCH AS PHYSICS
+        updateSystems();
         // AND GRAPHICS ARE THE LAST THING THAT SHOULD BE UPDATED
+        updateGraphics();
+    }
+
+    /**
+     * Hook method which updates the input monitors
+     */
+    protected void updateInputMonitor() {
+        input.update();
+    }
+
+    /**
+     * Hook method which updates the main game code in the scene manager
+     */
+    protected void updateGameCode() {
+        scenemanager.update();
+    }
+
+    /**
+     * Hook method which updates any extra systems, such as physics
+     */
+    protected void updateSystems() {
+
+    }
+
+    /**
+     * HOok method which updates the game's graphics
+     */
+    protected void updateGraphics() {
         graphics.update();
     }
 
@@ -173,7 +190,7 @@ public class AegisGame implements java.lang.Runnable {
     /**
      * @return the graphical system being used by the game
      */
-    public GameGraphics getGraphics() {
+    public Aegis2DGraphics getGraphics() {
         return graphics;
     }
 
@@ -189,5 +206,19 @@ public class AegisGame implements java.lang.Runnable {
      */
     public TimeKeeper getTimeKeeper() {
         return timer;
+    }
+
+    /**
+     * Simple runtime exception thrown whenever a crucial system is missing
+     */
+    public class SystemMissingException extends RuntimeException {
+
+        public SystemMissingException(String message) {
+            super(message);
+        }
+
+        public SystemMissingException() {
+            super();
+        }
     }
 }

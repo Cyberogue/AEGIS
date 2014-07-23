@@ -100,15 +100,6 @@ public abstract class GameScene {
         update();
     }
 
-    /**
-     * Wrapper method which adds a RenderItem to the game's primary addToRenderList list
-     *
-     * @param item
-     */
-    public void addToRenderList(RenderItem item) {
-        game.getGraphics().addToGameRenderList(item);
-    }
-
     @Override
     public String toString() {
         return sceneID + '[' + state + ']';

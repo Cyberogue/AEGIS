@@ -25,11 +25,14 @@ package org.aegis.game;
 
 /**
  * Interface which is a parent class of all of the game's individual core
- * systems
+ * systems and serves simply to mark something as a runtime system
  *
  * @author Rogue <Alice Q.>
  */
 public interface RuntimeSystem {
 
+    /**
+     * Method called once per game loop, minimum
+     */
     abstract void update();
 }

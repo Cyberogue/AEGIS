@@ -21,13 +21,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.test;
+package org.aegis2d.test;
 
+import java.io.File;
+import java.io.IOException;
 import org.aegis.game.AegisGame;
+import org.aegis.ui.Decal;
 import org.aegis.ui.LayerStack;
 import org.aegis.ui.RenderItem;
-import org.aegis.ui.RenderList;
-import org.aegis.ui.Viewport;
+import org.aegis2d.Sprite2D;
 
 /**
  * Simple scene used for running test cases and nothing else
@@ -42,32 +44,28 @@ public class TestScene extends org.aegis.game.GameScene {
         super(game, sceneID);
     }
 
-    // TWO WAYS OF STORING ITEMS FOR RENDERING
-    private int debugItemID;
-    private RenderItem debugList;
-    private Viewport vp;
-    private LayerStack lm;
+    private RenderItem renderItem;
+    private Sprite2D testSprite;
 
     @Override
     public void onSceneEnter() {
-        // THIS IS JUST AN EXAMPLE OF HOW SCENE-SPECIFIC RENDERING STUFF WORKS
+        try {
+            Decal helloTile = new Decal(new File(".\\img\\HelloWorld.png"));
+            Decal blueTile = new Decal(new File(".\\img\\BlueBUtton.png"));
 
-        // LOADING ITEMS INTO THE SCENE IS SLOW BY COMPARISON SO WE ONLY WANT TO DO THIS ONCE
-        // YOU CAN STORE THIS IN ONE OF TWO WAYS - AS AN INDEX OR THROUGH DIRECT REFERENCE
-        debugItemID = game.getResources().getRenderItems().indexOf("ITEM");
-        debugList = game.getResources().getRenderItems().get("LIST");
+            renderItem = new LayerStack(2);
+            ((LayerStack) renderItem).addToLayer(0, new Sprite2D(blueTile));
+            ((LayerStack) renderItem).addToLayer(0, new Sprite2D(blueTile, 100, 100));
+            ((LayerStack) renderItem).addToLayer(1, new Sprite2D(helloTile, 50, 50));
+            ((LayerStack) renderItem).addToLayer(0, new Sprite2D(blueTile, 200, 100));
+            ((LayerStack) renderItem).addToLayer(1, new Sprite2D(helloTile, 100, 200));
+            ((LayerStack) renderItem).addToLayer(1, new Sprite2D(helloTile, 200, 200));
 
-        // VIEWPORT TESTING
-        vp = new Viewport(1920, 1080);
-        vp.limitOffset(-500, 5000, -1500, 1500);
-
-        // LAYER MANAGER
-        lm = new LayerStack(2);
-        lm.addToLayer(0, new DebugRenderItem("0a"));
-        lm.addToLayer(0, new DebugRenderItem("0b"));
-        lm.addToLayer(1, new DebugRenderItem("1a"));
-        lm.addToLayer(1, new DebugRenderItem("1b"));
-        lm.addToLayer(0, new DebugRenderItem("0c"));
+            testSprite = new Sprite2D(helloTile, 250, 250);
+            ((LayerStack) renderItem).addToLayer(1, testSprite);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @Override
@@ -75,15 +73,7 @@ public class TestScene extends org.aegis.game.GameScene {
         // PRINT A MESSAGE OR SOMETHING
         System.out.println(this + "\t" + game.getTimeKeeper());
 
-        // THESE TWO RENDER METHODS ARE FAST ENOUGH FOR RUNTIME USAGE, AS LONG AS YOU RETRIEVE OBJECTS USING AN INTEGER AND NOT A STRING
-        // addToRenderList(game.getResources().getRenderItems().get(debugItemID));  // THIS USES AN ID
-        // addToRenderList(debugList);  // THIS USES DIRECT REFERENCE
-        // !!!! DO NOT USE STRING KEYS AT RUNTIME TO FETCH ITEMS !!!!!
-        // addToRenderList(game.getResources().getRenderItems().get("LIST"));
-        //
-        // System.out.println(vp);
-        // vp.moveX(500.0f);
-        // vp.moveY(500 - rand.nextInt(1000));
-        addToRenderList(lm);
+        game.getGraphics().render(renderItem);
+        testSprite.move(10 - rand.nextFloat() * 20, 10 - rand.nextFloat() * 20);
     }
 }

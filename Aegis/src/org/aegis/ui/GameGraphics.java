@@ -23,94 +23,21 @@
  */
 package org.aegis.ui;
 
-import java.awt.Canvas;
-import java.awt.Graphics2D;
-import java.util.LinkedList;
-import javax.swing.JFrame;
 import org.aegis.game.RuntimeSystem;
 
 /**
- *
- * Managerial class which handles the game's windows and rendering RenderItems
- * at runtime
+ * Interface which serves as the core for all of the game's graphical systems.
+ * Since the base system is only an interface, this allows for user-level
+ * implementations across varying platforms.
  *
  * @author Rogue <Alice Q.>
  */
-public class GameGraphics implements RuntimeSystem {
-
-    // BACKGROUND
-    private RenderItem background;
-
-    // GAME RENDER LIST
-    private LinkedList<RenderItem> gameRenderList;
-    // GUI RENDER LIST
-    private LinkedList<RenderItem> guiRenderList;
-
-    // THE MAIN GAME WINDOW
-    private JFrame window;
-
-    // CORRESPONDING GAME GRAPHICS
-    private Graphics2D g2d;
+public interface GameGraphics extends RuntimeSystem {
 
     /**
-     * Constructor
-     *
-     * @param canvas a Canvas to use for rendering
-     */
-    public GameGraphics(JFrame frame) {
-        this.gameRenderList = new LinkedList();
-        this.guiRenderList = new LinkedList();
-        this.window = frame;
-    }
-
-    /**
-     * Method to set the background RenderItem. This is the first item rendered
-     * on-screen and should represent the background.
-     *
-     * @param bg the RenderItem to use as the background
-     */
-    public void setBackground(RenderItem bg) {
-        background = bg;
-    }
-
-    /**
-     * Adds a RenderItem to the end of the GUI render list
-     *
-     * @param item the item to queue for rendering
-     */
-    public void addToGUIRenderList(RenderItem item) {
-        guiRenderList.push(item);
-    }
-
-    /**
-     * Adds a RenderItem to the end of the game render list
-     *
-     * @param item the item to queue for rendering
-     */
-    public void addToGameRenderList(RenderItem item) {
-        gameRenderList.push(item);
-    }
-
-    public void removeFromGUIRenderList(RenderItem item) {
-        guiRenderList.remove(item);
-    }
-
-    /**
-     * Renders everything contained in the game and GUI render lists, as well as
-     * the background. The GUI render list is always rendered on top of the game
-     * render list. Please note that this removes the item from the render
-     * lists, so a persistent item must be re-added every frame
+     * Method called once per game loop, at the end of the game loop. Use this
+     * to render everything in the game
      */
     @Override
-    public final void update() {
-        if (background != null) {
-            background.render(this, 0, 0);
-        }
-        for (int i = 0; i < gameRenderList.size(); i++) {
-            gameRenderList.removeFirst().render(this, 0, 0);
-        }
-        for (int i = 0; i < guiRenderList.size(); i++) {
-            guiRenderList.removeFirst().render(this, 0, 0);
-        }
-    }
+    public abstract void update();
 }

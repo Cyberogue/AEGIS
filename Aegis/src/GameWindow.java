@@ -21,13 +21,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.ui;
+
 
 import java.awt.Toolkit;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 /**
  * Custom JFrame to contain the main game window

@@ -23,16 +23,44 @@
  */
 package org.aegis2d;
 
-import org.aegis.ui.GameGraphics;
-import org.aegis2d.StaticGraphic;
+import java.awt.Canvas;
+import java.awt.Graphics2D;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import org.aegis.data.GameResourceManager;
+import org.aegis.game.AegisGame;
+import org.aegis.game.GameSceneManager;
+import org.aegis.game.TimeKeeper;
+import org.aegis.ui.GameInputMonitor;
+import org.aegis.ui.RenderItem;
+import org.aegis.ui.RenderList;
 
 /**
+ * Wrapper for the AegisGame which adds simple constructors and additional awt
+ * and swing functionality
  *
  * @author Rogue <Alice Q.>
  */
-public class AnimatedSprite {
+public class Aegis2DGame extends AegisGame {
 
-    public void render(GameGraphics g) {
+    public Aegis2DGame(String name, int width, int height) {
+        this(name, width, height, TimeKeeper.FRAMERATE_HIGH);
+    }
 
+    public Aegis2DGame(String name, int width, int height, float targetFramerate) {
+        super(name, targetFramerate);
+
+        Aegis2DGraphics a2dg = new Aegis2DGraphics();
+        a2dg.initializeWindow(width, height, true);
+        set(a2dg);
+
+        set(new GameInputMonitor());
+        set(new GameResourceManager());
+        set(new GameSceneManager(this));
+    }
+
+    @Override
+    public Aegis2DGraphics getGraphics() {
+        return super.getGraphics();
     }
 }

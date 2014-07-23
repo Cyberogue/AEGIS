@@ -23,6 +23,7 @@
  */
 package org.aegis.ui;
 
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -35,7 +36,7 @@ import java.util.Collection;
 public class LayerStack implements RenderItem {
 
     // THE LAYERS
-    private ArrayList<RenderList> layers;
+    private final ArrayList<RenderList> layers;
 
     /**
      * Constructor which also creates an initial number of layers
@@ -96,8 +97,25 @@ public class LayerStack implements RenderItem {
         return layers.size();
     }
 
+    /**
+     * Clears each of the layers in the layer stack, preserving the layers
+     * themselves
+     */
+    public void clear() {
+        for (RenderList list : layers) {
+            list.clear();
+        }
+    }
+
+    /**
+     * Deletes all the layers from the layer stack
+     */
+    public void clearAll() {
+        layers.clear();
+    }
+
     @Override
-    public void render(GameGraphics g, float offsetX, float offsetY) {
+    public void render(Graphics g, float offsetX, float offsetY) {
         for (RenderList list : layers) {
             list.render(g, offsetX, offsetY);
         }

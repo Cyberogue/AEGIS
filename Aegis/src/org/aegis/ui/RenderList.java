@@ -23,6 +23,7 @@
  */
 package org.aegis.ui;
 
+import java.awt.Graphics;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -166,7 +167,7 @@ public class RenderList implements RenderItem, java.util.Queue<RenderItem> {
     }
 
     @Override
-    public void render(GameGraphics g, float offsetX, float offsetY) {
+    public void render(Graphics g, float offsetX, float offsetY) {
         for (RenderItem item : renderList) {
             item.render(g, offsetX, offsetY);
         }
