@@ -41,14 +41,11 @@ public class RenderList implements RenderItem, java.util.Queue<RenderItem> {
     // THE MAXIMUM LIST SIZE
     private int maxSize;
 
-    // PERSISTANCE
-    private boolean persistent;
-
     /**
      * Constructor for a RenderList with no upper limit and no persistence
      */
     public RenderList() {
-        this(0, false);
+        this(0);
     }
 
     /**
@@ -58,23 +55,8 @@ public class RenderList implements RenderItem, java.util.Queue<RenderItem> {
      * @param maxSize the maximum amount of items allowable in the RenderList
      */
     public RenderList(int maxSize) {
-        this(maxSize, false);
-    }
-
-    /**
-     * Constructor for a RenderList with a specified upper limit and specified
-     * persistence
-     *
-     * @param maxSize maxSize the maximum amount of items allowable in the
-     * RenderList
-     * @param persistent when true, the RenderList has persistence and will not
-     * remove items as it renders them. When false (the default), rendered items
-     * will only be rendered once then removed.
-     */
-    public RenderList(int maxSize, boolean persistent) {
         this.maxSize = maxSize;
         this.renderList = new LinkedList();
-        this.persistent = persistent;
     }
 
     @Override
@@ -188,20 +170,5 @@ public class RenderList implements RenderItem, java.util.Queue<RenderItem> {
         for (RenderItem item : renderList) {
             item.render(g, offsetX, offsetY);
         }
-        if (!persistent) {
-            renderList.clear();
-        }
-    }
-
-    /**
-     * Sets the persistece of items in the list. When the list is persistent,
-     * items will not be removed from the list after rendering, otherwise the
-     * list will be emptied regularly.
-     *
-     * @param on true in order to prevent items from being removed as they are
-     * rendered
-     */
-    public void setPersistence(boolean on) {
-        persistent = on;
     }
 }

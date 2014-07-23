@@ -24,28 +24,30 @@
 package org.aegis.test;
 
 import org.aegis.game.AegisGame;
+import org.aegis.ui.LayerStack;
 import org.aegis.ui.RenderItem;
 import org.aegis.ui.RenderList;
 import org.aegis.ui.Viewport;
 
 /**
+ * Simple scene used for running test cases and nothing else
  *
  * @author Rogue <Alice Q>
  */
-public class DebugScene extends org.aegis.game.GameScene {
-    
+public class TestScene extends org.aegis.game.GameScene {
+
     private final static java.util.Random rand = new java.util.Random();
-    
-    public DebugScene(AegisGame game, String sceneID) {
+
+    public TestScene(AegisGame game, String sceneID) {
         super(game, sceneID);
     }
 
     // TWO WAYS OF STORING ITEMS FOR RENDERING
     private int debugItemID;
     private RenderItem debugList;
-    
     private Viewport vp;
-    
+    private LayerStack lm;
+
     @Override
     public void onSceneEnter() {
         // THIS IS JUST AN EXAMPLE OF HOW SCENE-SPECIFIC RENDERING STUFF WORKS
@@ -54,27 +56,34 @@ public class DebugScene extends org.aegis.game.GameScene {
         // YOU CAN STORE THIS IN ONE OF TWO WAYS - AS AN INDEX OR THROUGH DIRECT REFERENCE
         debugItemID = game.getResources().getRenderItems().indexOf("ITEM");
         debugList = game.getResources().getRenderItems().get("LIST");
-        ((RenderList) debugList).setPersistence(true);
 
         // VIEWPORT TESTING
         vp = new Viewport(1920, 1080);
         vp.limitOffset(-500, 5000, -1500, 1500);
-        
-        System.out.println(this + "\t" + game.getTimeKeeper());
+
+        // LAYER MANAGER
+        lm = new LayerStack(2);
+        lm.addToLayer(0, new DebugRenderItem("0a"));
+        lm.addToLayer(0, new DebugRenderItem("0b"));
+        lm.addToLayer(1, new DebugRenderItem("1a"));
+        lm.addToLayer(1, new DebugRenderItem("1b"));
+        lm.addToLayer(0, new DebugRenderItem("0c"));
     }
-    
+
     @Override
     public void update() {
         // PRINT A MESSAGE OR SOMETHING
-        //System.out.println(this + "\t" + game.getTimeKeeper());
+        System.out.println(this + "\t" + game.getTimeKeeper());
 
         // THESE TWO RENDER METHODS ARE FAST ENOUGH FOR RUNTIME USAGE, AS LONG AS YOU RETRIEVE OBJECTS USING AN INTEGER AND NOT A STRING
-        //addToRenderList(game.getResources().getRenderItems().get(debugItemID));  // THIS USES AN ID
-        //addToRenderList(debugList);  // THIS USES DIRECT REFERENCE
+        // addToRenderList(game.getResources().getRenderItems().get(debugItemID));  // THIS USES AN ID
+        // addToRenderList(debugList);  // THIS USES DIRECT REFERENCE
         // !!!! DO NOT USE STRING KEYS AT RUNTIME TO FETCH ITEMS !!!!!
         // addToRenderList(game.getResources().getRenderItems().get("LIST"));
-        System.out.println(vp);
-        vp.moveX(500.0f);
-        vp.moveY(500 - rand.nextInt(1000));
+        //
+        // System.out.println(vp);
+        // vp.moveX(500.0f);
+        // vp.moveY(500 - rand.nextInt(1000));
+        addToRenderList(lm);
     }
 }

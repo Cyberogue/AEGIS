@@ -34,8 +34,18 @@ import org.aegis.ui.RenderItem;
  */
 public class DebugRenderItem implements RenderItem {
 
+    private String name;
+
+    public DebugRenderItem() {
+        this.name = toString();
+    }
+
+    public DebugRenderItem(String name) {
+        this.name = name;
+    }
+
     @Override
-    public void render(GameGraphics g) {
-        System.out.println("RENDER " + this);
+    public void render(GameGraphics g, float offsetX, float offsetY) {
+        System.out.println("RENDER " + name);
     }
 }
