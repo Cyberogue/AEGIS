@@ -71,6 +71,24 @@ public class Decal implements RenderItem {
         return image;
     }
 
+    /**
+     * Returns the width of the decal
+     *
+     * @return the width of the decal
+     */
+    public int getWidth() {
+        return image.getWidth();
+    }
+
+    /**
+     * Returns the height of the decal
+     *
+     * @return the height of the decal
+     */
+    public int getHeight() {
+        return image.getHeight();
+    }
+
     @Override
     public void render(Graphics g, float offsetX, float offsetY) {
         g.drawImage(image, (int) offsetX, (int) offsetY, null);

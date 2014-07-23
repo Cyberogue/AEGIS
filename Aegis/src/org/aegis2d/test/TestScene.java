@@ -51,6 +51,9 @@ public class TestScene extends org.aegis.game.GameScene {
     private LayerStack stack;
     private Sprite2D sprite;
 
+    private int direction;
+    private float vY;
+
     @Override
     public void onSceneEnter() {
         try {
@@ -64,20 +67,23 @@ public class TestScene extends org.aegis.game.GameScene {
             // A RENDER LIST
             list = new RenderList();
             for (int i = 0; i < 3; i++) {
-                list.add(new FixedRenderItem(blueTile, 50 + i * 50, 200));
-                list.add(new FixedRenderItem(helloTile, 75 + i * 50, 225));
+                list.add(new FixedRenderItem(blueTile, 50 + i * 50, 200 + i * 10));
+                list.add(new FixedRenderItem(helloTile, 75 + i * 50, 205 + i * 10));
             }
 
             // A LAYER STACK
             stack = new LayerStack(3);
             for (int i = 0; i < 5; i++) {
-                stack.addToLayer(0, new FixedRenderItem(blueTile, 50 + i * 50, 300));
-                stack.addToLayer(1, new FixedRenderItem(helloTile, 75 + i * 50, 325));
-                stack.addToLayer(2, new FixedRenderItem(blueTile, 100 + i * 50, 350));
+                stack.addToLayer(0, new FixedRenderItem(blueTile, 50 + i * 50, 300 + i * 5));
+                stack.addToLayer(1, new FixedRenderItem(helloTile, 75 + i * 50, 325 + i * 5));
+                stack.addToLayer(2, new FixedRenderItem(blueTile, 100 + i * 50, 350 + i * 5));
             }
 
             // AND A SIMPLE SPRITE
             sprite = new Sprite2D(helloTile, 250, 500);
+            stack.addToLayer(1, sprite);
+            direction = 1; // SIMPLE BOUNCING CODE
+            vY = 1;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -92,7 +98,17 @@ public class TestScene extends org.aegis.game.GameScene {
         game.getGraphics().render(list);
         game.getGraphics().render(stack);
 
-        sprite.move(2 - rand.nextFloat() * 3, 2 - rand.nextFloat() * 4);
-        game.getGraphics().render(sprite);
+        // SIMPLE BOUNCING CODE
+        if (sprite.x() > 1024 - sprite.getDecal().getWidth()) {
+            direction = -1;
+        } else if (sprite.x() < 0) {
+            direction = 1;
+        }
+        vY += 1;
+        if (sprite.y() > 768 - sprite.getDecal().getHeight()) {
+            vY = -10 + rand.nextFloat() * -30;
+        }
+        sprite.move(direction * 5 * game.getTimeKeeper().getPerformance(), vY);
+        // NO NEED TO RENDER THE SPRITE SINCE IT'S PART OF THE STACK
     }
 }
