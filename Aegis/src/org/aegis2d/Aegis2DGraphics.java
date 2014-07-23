@@ -23,6 +23,7 @@
  */
 package org.aegis2d;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -74,10 +75,12 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
      * Method to set the background RenderItem. This is the first item rendered
      * on-screen and should represent the background.
      *
-     * @param bg the RenderItem to use as the background
+     * @param bgColor the background color behind the item
+     * @param bgDecal the RenderItem to use as the background
      */
-    public void setBackground(RenderItem bg) {
-        background = bg;
+    public void setBackground(Color bgColor, Decal bgDecal) {
+        gameWindow.setBackground(bgColor);
+        background = bgDecal;
     }
 
     /**

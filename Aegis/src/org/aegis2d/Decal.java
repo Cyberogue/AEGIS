@@ -21,8 +21,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.ui;
+package org.aegis2d;
 
+import org.aegis.ui.RenderItem;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;

@@ -21,40 +21,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis2d;
+package org.aegis.ui;
 
-import org.aegis.data.GameResourceManager;
-import org.aegis.game.AegisGame;
-import org.aegis.game.GameSceneManager;
-import org.aegis.game.TimeKeeper;
-import org.aegis.ui.GameInputMonitor;
+import java.awt.Graphics;
 
 /**
- * Wrapper for the AegisGame which adds simple constructors and additional awt
- * and swing functionality
+ * Wrapper class for RenderItems which provides a constant fixed, immutable X
+ * and Y position
  *
  * @author Rogue <Alice Q.>
  */
-public class Aegis2DGame extends AegisGame {
+public class FixedRenderItem implements RenderItem {
 
-    public Aegis2DGame(String name, int width, int height) {
-        this(name, width, height, TimeKeeper.FRAMERATE_HIGH);
-    }
+    // X AND Y COORDINATES
+    private final float x;
+    private final float y;
 
-    public Aegis2DGame(String name, int width, int height, float targetFramerate) {
-        super(name, targetFramerate);
+    // THE RENDER ITEM TO WRAP AROUND
+    private RenderItem item;
 
-        Aegis2DGraphics a2dg = new Aegis2DGraphics();
-        a2dg.initializeWindow(width, height, true);
-        set(a2dg);
-
-        set(new GameInputMonitor());
-        set(new GameResourceManager());
-        set(new GameSceneManager(this));
+    /**
+     * Basic constructor
+     *
+     * @param item the RenderItem to wrap around
+     * @param windowX the fixed x position
+     * @param windowY the fixed y position
+     */
+    public FixedRenderItem(RenderItem item, float windowX, float windowY) {
+        this.x = windowX;
+        this.y = windowY;
+        this.item = item;
     }
 
     @Override
-    public Aegis2DGraphics getGraphics() {
-        return super.getGraphics();
+    public final void render(Graphics g, float offsetX, float offsetY) {
+        item.render(g, x, y);
     }
 }

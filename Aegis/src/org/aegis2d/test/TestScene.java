@@ -26,9 +26,11 @@ package org.aegis2d.test;
 import java.io.File;
 import java.io.IOException;
 import org.aegis.game.AegisGame;
-import org.aegis.ui.Decal;
+import org.aegis.ui.FixedRenderItem;
+import org.aegis2d.Decal;
 import org.aegis.ui.LayerStack;
 import org.aegis.ui.RenderItem;
+import org.aegis.ui.RenderList;
 import org.aegis2d.Sprite2D;
 
 /**
@@ -44,25 +46,38 @@ public class TestScene extends org.aegis.game.GameScene {
         super(game, sceneID);
     }
 
-    private RenderItem renderItem;
-    private Sprite2D testSprite;
+    private RenderItem item;
+    private RenderList list;
+    private LayerStack stack;
+    private Sprite2D sprite;
 
     @Override
     public void onSceneEnter() {
         try {
+            // DECALS ARE EXTENSIONS OF BUFFEREDIMAGES SUITED FOR USE WITH AEGIS
             Decal helloTile = new Decal(new File(".\\img\\HelloWorld.png"));
             Decal blueTile = new Decal(new File(".\\img\\BlueBUtton.png"));
 
-            renderItem = new LayerStack(2);
-            ((LayerStack) renderItem).addToLayer(0, new Sprite2D(blueTile));
-            ((LayerStack) renderItem).addToLayer(0, new Sprite2D(blueTile, 100, 100));
-            ((LayerStack) renderItem).addToLayer(1, new Sprite2D(helloTile, 50, 50));
-            ((LayerStack) renderItem).addToLayer(0, new Sprite2D(blueTile, 200, 100));
-            ((LayerStack) renderItem).addToLayer(1, new Sprite2D(helloTile, 100, 200));
-            ((LayerStack) renderItem).addToLayer(1, new Sprite2D(helloTile, 200, 200));
+            // A SIMPLE RENDER ITEM 
+            item = new FixedRenderItem(blueTile, 50, 100);
 
-            testSprite = new Sprite2D(helloTile, 250, 250);
-            ((LayerStack) renderItem).addToLayer(1, testSprite);
+            // A RENDER LIST
+            list = new RenderList();
+            for (int i = 0; i < 3; i++) {
+                list.add(new FixedRenderItem(blueTile, 50 + i * 50, 200));
+                list.add(new FixedRenderItem(helloTile, 75 + i * 50, 225));
+            }
+
+            // A LAYER STACK
+            stack = new LayerStack(3);
+            for (int i = 0; i < 5; i++) {
+                stack.addToLayer(0, new FixedRenderItem(blueTile, 50 + i * 50, 300));
+                stack.addToLayer(1, new FixedRenderItem(helloTile, 75 + i * 50, 325));
+                stack.addToLayer(2, new FixedRenderItem(blueTile, 100 + i * 50, 350));
+            }
+
+            // AND A SIMPLE SPRITE
+            sprite = new Sprite2D(helloTile, 250, 500);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -73,7 +88,11 @@ public class TestScene extends org.aegis.game.GameScene {
         // PRINT A MESSAGE OR SOMETHING
         System.out.println(this + "\t" + game.getTimeKeeper());
 
-        game.getGraphics().render(renderItem);
-        testSprite.move(10 - rand.nextFloat() * 20, 10 - rand.nextFloat() * 20);
+        game.getGraphics().render(item);
+        game.getGraphics().render(list);
+        game.getGraphics().render(stack);
+
+        sprite.move(2 - rand.nextFloat() * 3, 2 - rand.nextFloat() * 4);
+        game.getGraphics().render(sprite);
     }
 }
