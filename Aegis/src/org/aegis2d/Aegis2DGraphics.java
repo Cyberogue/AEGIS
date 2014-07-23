@@ -88,7 +88,7 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
      *
      * @param item the RenderItem to add
      */
-    public void render(RenderItem item) {
+    public synchronized void render(RenderItem item) {
         renderlist.add(item);
     }
 
@@ -100,11 +100,13 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
      */
     @Override
     public final void update() {
-        gameWindow.repaint();
+        if (gameWindow.isVisible()) {
+            gameWindow.repaint();
+        }
     }
 
     @Override
-    public final void paintComponent(Graphics g) {
+    public final synchronized void paintComponent(Graphics g) {
         if (background != null) {
             background.render(g, 0, 0);
         }

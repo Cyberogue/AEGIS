@@ -105,7 +105,7 @@ public class TestScene extends org.aegis.game.GameScene {
             direction = 1;
         }
         vY += 1;
-        if (sprite.y() > 768 - sprite.getDecal().getHeight()) {
+        if (sprite.y() > 768 - sprite.getDecal().getHeight() - vY) {
             vY = -10 + rand.nextFloat() * -30;
         }
         sprite.move(direction * 5 * game.getTimeKeeper().getPerformance(), vY);
