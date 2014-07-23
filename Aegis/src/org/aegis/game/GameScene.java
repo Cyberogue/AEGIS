@@ -23,6 +23,8 @@
  */
 package org.aegis.game;
 
+import org.aegis.ui.RenderItem;
+
 /**
  * Abstract class providing the framework for separate game code for a single
  * scene
@@ -96,6 +98,15 @@ public abstract class GameScene {
      */
     public void paused() {
         update();
+    }
+
+    /**
+     * Wrapper method which adds a RenderItem to the game's primary addToRenderList list
+     *
+     * @param item
+     */
+    public void addToRenderList(RenderItem item) {
+        game.getGraphics().addToGameRenderList(item);
     }
 
     @Override

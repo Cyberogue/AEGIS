@@ -24,27 +24,57 @@
 package org.aegis.test;
 
 import org.aegis.game.AegisGame;
-import org.aegis.game.TimeKeeper;
 import org.aegis.ui.RenderItem;
+import org.aegis.ui.RenderList;
+import org.aegis.ui.Viewport;
 
 /**
  *
  * @author Rogue <Alice Q>
  */
 public class DebugScene extends org.aegis.game.GameScene {
-
+    
     private final static java.util.Random rand = new java.util.Random();
-
+    
     public DebugScene(AegisGame game, String sceneID) {
         super(game, sceneID);
     }
 
+    // TWO WAYS OF STORING ITEMS FOR RENDERING
+    private int debugItemID;
+    private RenderItem debugList;
+    
+    private Viewport vp;
+    
+    @Override
+    public void onSceneEnter() {
+        // THIS IS JUST AN EXAMPLE OF HOW SCENE-SPECIFIC RENDERING STUFF WORKS
+
+        // LOADING ITEMS INTO THE SCENE IS SLOW BY COMPARISON SO WE ONLY WANT TO DO THIS ONCE
+        // YOU CAN STORE THIS IN ONE OF TWO WAYS - AS AN INDEX OR THROUGH DIRECT REFERENCE
+        debugItemID = game.getResources().getRenderItems().indexOf("ITEM");
+        debugList = game.getResources().getRenderItems().get("LIST");
+        ((RenderList) debugList).setPersistence(true);
+
+        // VIEWPORT TESTING
+        vp = new Viewport(1920, 1080);
+        vp.limitOffset(-500, 5000, -1500, 1500);
+        
+        System.out.println(this + "\t" + game.getTimeKeeper());
+    }
+    
     @Override
     public void update() {
-        System.out.println(this + "\t" + game.getTimeKeeper());
+        // PRINT A MESSAGE OR SOMETHING
+        //System.out.println(this + "\t" + game.getTimeKeeper());
 
-        RenderItem debugItem = game.getResources().getRenderItems().get(0);
-
-        game.getGraphics().addToGameRenderList(debugItem);
+        // THESE TWO RENDER METHODS ARE FAST ENOUGH FOR RUNTIME USAGE, AS LONG AS YOU RETRIEVE OBJECTS USING AN INTEGER AND NOT A STRING
+        //addToRenderList(game.getResources().getRenderItems().get(debugItemID));  // THIS USES AN ID
+        //addToRenderList(debugList);  // THIS USES DIRECT REFERENCE
+        // !!!! DO NOT USE STRING KEYS AT RUNTIME TO FETCH ITEMS !!!!!
+        // addToRenderList(game.getResources().getRenderItems().get("LIST"));
+        System.out.println(vp);
+        vp.moveX(500.0f);
+        vp.moveY(500 - rand.nextInt(1000));
     }
 }

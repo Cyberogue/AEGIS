@@ -23,7 +23,10 @@
  */
 package org.aegis.ui;
 
+import java.awt.Canvas;
+import java.awt.Graphics2D;
 import java.util.LinkedList;
+import javax.swing.JFrame;
 import org.aegis.game.RuntimeSystem;
 
 /**
@@ -43,12 +46,21 @@ public class GameGraphics implements RuntimeSystem {
     // GUI RENDER LIST
     private LinkedList<RenderItem> guiRenderList;
 
+    // THE MAIN GAME WINDOW
+    private JFrame window;
+
+    // CORRESPONDING GAME GRAPHICS
+    private Graphics2D g2d;
+
     /**
      * Constructor
+     *
+     * @param canvas a Canvas to use for rendering
      */
-    public GameGraphics() {
-        gameRenderList = new LinkedList();
-        guiRenderList = new LinkedList();
+    public GameGraphics(JFrame frame) {
+        this.gameRenderList = new LinkedList();
+        this.guiRenderList = new LinkedList();
+        this.window = frame;
     }
 
     /**
@@ -92,13 +104,13 @@ public class GameGraphics implements RuntimeSystem {
     @Override
     public final void update() {
         if (background != null) {
-            background.render(this);
+            background.render(this, 0, 0);
         }
         for (int i = 0; i < gameRenderList.size(); i++) {
-            gameRenderList.removeFirst().render(this);
+            gameRenderList.removeFirst().render(this, 0, 0);
         }
         for (int i = 0; i < guiRenderList.size(); i++) {
-            guiRenderList.removeFirst().render(this);
+            guiRenderList.removeFirst().render(this, 0, 0);
         }
     }
 }

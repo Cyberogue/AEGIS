@@ -184,12 +184,24 @@ public class RenderList implements RenderItem, java.util.Queue<RenderItem> {
     }
 
     @Override
-    public void render(GameGraphics g) {
+    public void render(GameGraphics g, float offsetX, float offsetY) {
         for (RenderItem item : renderList) {
-            item.render(g);
+            item.render(g, offsetX, offsetY);
         }
         if (!persistent) {
             renderList.clear();
         }
+    }
+
+    /**
+     * Sets the persistece of items in the list. When the list is persistent,
+     * items will not be removed from the list after rendering, otherwise the
+     * list will be emptied regularly.
+     *
+     * @param on true in order to prevent items from being removed as they are
+     * rendered
+     */
+    public void setPersistence(boolean on) {
+        persistent = on;
     }
 }

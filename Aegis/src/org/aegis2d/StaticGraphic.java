@@ -21,21 +21,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.ui;
+package org.aegis2d;
 
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import org.aegis.data.GameResourceManager;
 import org.aegis.game.AegisGame;
+import org.aegis.ui.GameGraphics;
+import org.aegis.ui.RenderItem;
 
 /**
- * Class intended for repetitive use which maintains a single reference to a
- * RenderItem and allows for fast direct access to it
+ * RenderItem which simply contains a buffered image loaded from a file
  *
  * @author Rogue <Alice Q.>
  */
-public class Sprite implements RenderItem {
+public class StaticGraphic implements RenderItem {
+
+    // THE MAIN BUFFEREDIMAGE
+    private BufferedImage image;
+
+    public StaticGraphic(String imageDir) throws IOException {
+        image = ImageIO.read(new File(imageDir));
+    }
+
+    public StaticGraphic(BufferedImage image) {
+        this.image = image;
+    }
 
     @Override
-    public void render(GameGraphics g) {
+    public void render(GameGraphics g, float offsetX, float offsetY) {
 
     }
 }

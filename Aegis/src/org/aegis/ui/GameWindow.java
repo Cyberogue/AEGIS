@@ -21,15 +21,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis2d;
+package org.aegis.ui;
 
 import java.awt.Toolkit;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-
-import org.aegis.game.TimeKeeper;
 
 /**
  * Custom JFrame to contain the main game window

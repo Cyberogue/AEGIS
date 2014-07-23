@@ -23,6 +23,7 @@
  */
 package org.aegis.game;
 
+import javax.swing.JFrame;
 import org.aegis.data.GameResourceManager;
 import org.aegis.ui.GameGraphics;
 import org.aegis.ui.GameInputMonitor;
@@ -64,7 +65,7 @@ public class AegisGame implements java.lang.Runnable {
         this.timer = new TimeKeeper(this);
         this.name = name;
 
-        graphics = new GameGraphics();
+        graphics = new GameGraphics(new JFrame());
         scenemanager = new GameSceneManager(this);
         input = new GameInputMonitor();
         resources = new GameResourceManager();
@@ -81,7 +82,7 @@ public class AegisGame implements java.lang.Runnable {
         this.timer = new TimeKeeper(this, targetFramerate);
         this.name = name;
 
-        graphics = new GameGraphics();
+        graphics = new GameGraphics(new JFrame());
         scenemanager = new GameSceneManager(this);
         input = new GameInputMonitor();
         resources = new GameResourceManager();
@@ -130,7 +131,7 @@ public class AegisGame implements java.lang.Runnable {
      */
     public void start() {
         if (graphics == null) {
-            graphics = new GameGraphics();
+            graphics = new GameGraphics(new JFrame());
         }
         if (scenemanager == null) {
             scenemanager = new GameSceneManager(this);

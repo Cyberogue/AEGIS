@@ -269,12 +269,13 @@ public class TimeKeeper implements java.lang.Runnable {
         // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
         if (delta > 0 && !unlockedFramerate) {
             try {
-                Thread.sleep(delta / 1000000);
+                Thread.sleep((delta + 500000) / 1000000);
 
                 // THIS PART IS CPU HEAVY BUT RELATIVELY SHORT COMPARED TO THE LONGER SLEEP
                 if (waitNanos) {
-                    while (currentTime <= stopTime + (delta % 1000000) + 500000) {
+                    while (currentTime <= stopTime + (delta % 1000000)) {
                         // DO NOTHING \o/
+                        Thread.yield();
                         currentTime = System.nanoTime();
                     }
                 }
@@ -287,7 +288,7 @@ public class TimeKeeper implements java.lang.Runnable {
         // CALCULATE STATISTICS AND FINISH UP
         long runtime = System.nanoTime() - startTime;
 
-        averageRuntime = (lastRuntime + runtime) / 2;
+        averageRuntime = (15 * lastRuntime + runtime) / 16;
         performance = (float) runtime / targetNanos;
         lastRuntime = runtime;
         framenumber++;
@@ -298,6 +299,6 @@ public class TimeKeeper implements java.lang.Runnable {
      */
     @Override
     public String toString() {
-        return String.format("[%06d]\t[%4.2f%c\t% 8.2f\t%.3f]", framenumber, targetFramerate, (unlockedFramerate ? '+' : ' '), 1000000000.0f / averageRuntime, performance);
+        return String.format("[%08d]\t[%4.2f%c\t% 8.2f\t%.3f]", framenumber, targetFramerate, (unlockedFramerate ? '+' : ' '), 1000000000.0f / averageRuntime, performance);
     }
 }

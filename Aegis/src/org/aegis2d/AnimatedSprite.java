@@ -21,15 +21,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis.ui;
+package org.aegis2d;
+
+import org.aegis.ui.GameGraphics;
+import org.aegis2d.StaticGraphic;
 
 /**
  *
  * @author Rogue <Alice Q.>
  */
-public class AnimatedSprite extends Sprite {
+public class AnimatedSprite {
 
-    @Override
     public void render(GameGraphics g) {
 
     }

@@ -24,19 +24,9 @@
 package org.aegis.ui;
 
 /**
- * Interface for all items which are somehow renderable by the AEGIS system
  *
  * @author Rogue <Alice Q.>
  */
-public interface RenderItem {
+public class GameCanvas extends java.awt.Canvas {
 
-    /**
-     * This method is called whenever the item gets rendered, so any
-     * render-specific code should go here
-     *
-     * @param g the GameGraphics to render with
-     * @param offsetX the X offset to apply when rendering
-     * @param offsetY the Y offset to appyl when rendering
-     */
-    public abstract void render(GameGraphics g, float offsetX, float offsetY);
 }
