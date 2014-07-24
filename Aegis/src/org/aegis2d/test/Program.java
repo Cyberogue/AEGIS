@@ -24,9 +24,13 @@
 package org.aegis2d.test;
 
 import java.awt.Color;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import org.aegis.game.AegisGame;
 import org.aegis.game.GameScene;
-import org.aegis.ui.RenderList;
 import org.aegis2d.Aegis2DGame;
 
 /**
@@ -35,13 +39,21 @@ import org.aegis2d.Aegis2DGame;
  * @author Rogue <Alice Q>
  */
 public class Program {
-    
+
     public static void main(String[] args) {
         AegisGame game = new Aegis2DGame("My Game", 1024, 768, 60.0f);
-        
+
         GameScene debugScene = new TestScene(game, "DEBUG");
         game.getScenes().addScene(debugScene);
         game.getGraphics().setBackground(Color.white, null);
+
+        try {
+            BufferedImage icon = ImageIO.read(new File(".\\img\\icon.png"));
+            game.getGraphics().getWindow().setIconImage(icon); 
+        } catch (IOException ex) {
+            
+        }
+        
         game.start();
     }
 }

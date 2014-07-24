@@ -174,6 +174,15 @@ public class AegisGame implements java.lang.Runnable {
     }
 
     /**
+     * Returns the game's title
+     *
+     * @return the game's title
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
      * @return the resource content manager being used by the game
      */
     public GameResourceManager getResources() {

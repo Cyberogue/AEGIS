@@ -27,14 +27,15 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import org.aegis.game.AegisGame;
 import org.aegis.game.RuntimeSystem;
 import org.aegis.ui.GameGraphics;
 import org.aegis.ui.RenderItem;
 import org.aegis.ui.RenderList;
 
 /**
- * Class which contains the game's main render lists and uses a Swing
- * implementation for its primary rendering capabilities
+ * Class which contains the game's main addToRender lists and uses a Swing
+ implementation for its primary addToRendering capabilities
  *
  * @author Rogue <Alice Q.>
  */
@@ -51,9 +52,15 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
 
     /**
      * Constructor
+     *
+     * @param title the title to display on the game window
+     * @param initWidth the initial width
+     * @param initHeight the initial height
      */
-    public Aegis2DGraphics() {
+    public Aegis2DGraphics(String title, int initWidth, int initHeight) {
         renderlist = new RenderList();
+        gameWindow = new GameWindow(title, initWidth, initHeight);
+        gameWindow.add(this);
     }
 
     /**
@@ -63,17 +70,25 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
      * @param initHeight the initial height of the window
      * @param visible true in order to make the frame visible, otherwise false
      */
-    public void initializeWindow(int initWidth, int initHeight, boolean visible) {
-        gameWindow = new JFrame();
-        gameWindow.setSize(initWidth, initHeight);
-        gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameWindow.add(this);
-        gameWindow.setVisible(visible);
+    /*public void initializeWindow(int initWidth, int initHeight, boolean visible) {
+     gameWindow = new GameWindow(initWidth, initHeight);
+     gameWindow.setSize(initWidth, initHeight);
+     gameWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+     gameWindow.add(this);
+     gameWindow.setVisible(visible);
+     }*/
+    /**
+     * Returns the game's window container
+     *
+     * @return the game's window container
+     */
+    public JFrame getWindow() {
+        return gameWindow;
     }
 
     /**
-     * Method to set the background RenderItem. This is the first item rendered
-     * on-screen and should represent the background.
+     * Method to set the background RenderItem. This is the first item addToRendered
+ on-screen and should represent the background.
      *
      * @param bgColor the background color behind the item
      * @param bgDecal the RenderItem to use as the background
@@ -84,19 +99,19 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
     }
 
     /**
-     * Queues an item for rendering in the next available pass
+     * Queues an item for addToRendering in the next available pass
      *
      * @param item the RenderItem to add
      */
-    public synchronized void render(RenderItem item) {
+    public synchronized void addToRender(RenderItem item) {
         renderlist.add(item);
     }
 
     /**
-     * Renders everything contained in the game and GUI render lists, as well as
-     * the background. The GUI render list is always rendered on top of the game
-     * render list. Please note that this removes the item from the render
-     * lists, so a persistent item must be re-added every frame
+     * Renders everything contained in the game and GUI addToRender lists, as well as
+ the background. The GUI addToRender list is always addToRendered on top of the game
+ addToRender list. Please note that this removes the item from the addToRender
+ lists, so a persistent item must be re-added every frame
      */
     @Override
     public final void update() {

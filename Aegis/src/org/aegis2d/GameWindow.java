@@ -1,3 +1,5 @@
+package org.aegis2d;
+
 /*
  * The MIT License
  *
@@ -21,11 +23,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-
-
 import java.awt.Toolkit;
 import java.awt.GraphicsEnvironment;
 import java.awt.GraphicsDevice;
+import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -93,6 +94,10 @@ public class GameWindow extends JFrame {
     public void setFullscreen(boolean active) {
         config.fullscreen = active;
         config.borderless = active;
+    }
+
+    public void setIconImage(Decal decal) {
+        config.icon = new ImageIcon(decal.getImage());
     }
 
     /**

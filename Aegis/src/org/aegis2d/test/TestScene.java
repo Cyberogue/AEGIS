@@ -94,20 +94,23 @@ public class TestScene extends org.aegis.game.GameScene {
         // PRINT A MESSAGE OR SOMETHING
         System.out.println(this + "\t" + game.getTimeKeeper());
 
-        game.getGraphics().render(item);
-        game.getGraphics().render(list);
-        game.getGraphics().render(stack);
+        // GRAPHICS ARE ALWAYS RENDERED AFTER THE GAME CODE SO TING ISN'T MUCH OF AN ISSIE, BUT DOES ESTABLISH RENDER ORDER
+        game.getGraphics().addToRender(item);
+        game.getGraphics().addToRender(list);
+        game.getGraphics().addToRender(stack);
 
         // SIMPLE BOUNCING CODE
-        if (sprite.x() > 1024 - sprite.getDecal().getWidth()) {
+        if (sprite.x() > 1024 - sprite.getWidth()) {
             direction = -1;
         } else if (sprite.x() < 0) {
             direction = 1;
         }
         vY += 1;
-        if (sprite.y() > 768 - sprite.getDecal().getHeight() - vY) {
+        if (sprite.y() > 768 - sprite.getHeight() - vY) {
             vY = -10 + rand.nextFloat() * -30;
         }
+        float scale = .2f + .8f * 2 * sprite.y() / game.getGraphics().getHeight();
+        sprite.resize(scale * 64, scale * 64);
         sprite.move(direction * 5 * game.getTimeKeeper().getPerformance(), vY);
         // NO NEED TO RENDER THE SPRITE SINCE IT'S PART OF THE STACK
     }

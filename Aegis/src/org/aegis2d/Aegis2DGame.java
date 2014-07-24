@@ -44,10 +44,8 @@ public class Aegis2DGame extends AegisGame {
     public Aegis2DGame(String name, int width, int height, float targetFramerate) {
         super(name, targetFramerate);
 
-        Aegis2DGraphics a2dg = new Aegis2DGraphics();
-        a2dg.initializeWindow(width, height, true);
-        set(a2dg);
-
+        //a2dg.initializeWindow(width, height, true);
+        set(new Aegis2DGraphics(name, width, height));
         set(new GameInputMonitor());
         set(new GameResourceManager());
         set(new GameSceneManager(this));

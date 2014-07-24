@@ -36,35 +36,48 @@ import org.aegis.ui.RenderItem;
  *
  * @author Rogue <Alice Q.>
  */
-public class Sprite2D implements RenderItem {
-
-    // THE IMAGE
-    private Decal graphic;
+public class Sprite2D extends Decal implements RenderItem {
 
     // X AND Y COORDINATES
     private float worldX;
     private float worldY;
 
+    // SCALING FACTOR
+    private float width;
+    private float height;
+
     /**
-     * Creates a new Sprite2D from an image located at 0,0
+     * Constructor for a Sprite2D from a pre-loaded Decal located at 0,0
      *
-     * @param imgDir the directory of the image to load
-     * @throws IOException when there is a problem reading the image file
+     * @param decal the Decal to wrap this class around
      */
-    public Sprite2D(String imgDir) throws IOException {
-        this(ImageIO.read(new File(imgDir)));
+    public Sprite2D(Decal decal) {
+        this(decal.getImage(), 0, 0);
     }
 
     /**
-     * Creates a new Sprite2D from an image
+     * * Constructor for a Sprite2D from a pre-loaded Decal located at 0,0
      *
-     * @param imgDir the directory of the image to load
+     * @param decal the Decal to wrap this class around
      * @param initX the initial x position
      * @param initY the initial y position
-     * @throws IOException when there is a problem reading the image file
+     *
      */
-    public Sprite2D(String imgDir, float initX, float initY) throws IOException {
-        this(ImageIO.read(new File(imgDir)), initX, initY);
+    public Sprite2D(Decal decal, float initX, float initY) {
+        this(decal.getImage(), initX, initY);
+    }
+
+    /**
+     * * Constructor for a Sprite2D from a pre-loaded Decal located at 0,0
+     *
+     * @param decal the Decal to wrap this class around
+     * @param initX the initial x position
+     * @param initY the initial y position
+     * @param initHeight the initial x scaling
+     * @param initWidth the initial y scaling
+     */
+    public Sprite2D(Decal decal, float initX, float initY, float initWidth, float initHeight) {
+        this(decal.getImage(), initX, initY, initWidth, initHeight);
     }
 
     /**
@@ -73,9 +86,7 @@ public class Sprite2D implements RenderItem {
      * @param image the BufferedImage to wrap this class around
      */
     public Sprite2D(BufferedImage image) {
-        this.graphic = new Decal(image);
-        this.worldX = 0.0f;
-        this.worldY = 0.0f;
+        this(image, 0, 0);
     }
 
     /**
@@ -86,35 +97,24 @@ public class Sprite2D implements RenderItem {
      * @param initY the initial y position
      */
     public Sprite2D(BufferedImage image, float initX, float initY) {
-        this.graphic = new Decal(image);
-        this.worldX = initX;
-        this.worldY = initY;
-    }
-
-    /**
-     * Constructor for a Sprite2D from a pre-loaded BufferedImage located at 0,0
-     *
-     * @param decal a pre-defined Decal which represents the Sprite's render
-     * image
-     */
-    public Sprite2D(Decal decal) {
-        this.graphic = decal;
-        this.worldX = 0.0f;
-        this.worldY = 0.0f;
+        this(image, initX, initY, image.getWidth(), image.getHeight());
     }
 
     /**
      * Constructor for a Sprite2D from a pre-loaded BufferedImage
      *
-     * @param decal a pre-defined Decal which represents the Sprite's render
-     * image
+     * @param image the BufferedImage to wrap this class around
      * @param initX the initial x position
      * @param initY the initial y position
+     * @param initHeight the initial x scaling
+     * @param initWidth the initial y scaling
      */
-    public Sprite2D(Decal decal, float initX, float initY) {
-        this.graphic = decal;
+    public Sprite2D(BufferedImage image, float initX, float initY, float initHeight, float initWidth) {
+        super(image);
         this.worldX = initX;
         this.worldY = initY;
+        this.width = initWidth;
+        this.height = initHeight;
     }
 
     /**
@@ -133,15 +133,6 @@ public class Sprite2D implements RenderItem {
      */
     public float y() {
         return worldY;
-    }
-
-    /**
-     * Returns the buffered image being drawn by the Sprite2D
-     *
-     * @return the buffered image being drawn by the Sprite2D
-     */
-    public Decal getDecal() {
-        return graphic;
     }
 
     /**
@@ -186,13 +177,35 @@ public class Sprite2D implements RenderItem {
         this.worldY = worldY;
     }
 
+    /**
+     * Resizes the image
+     *
+     * @param width
+     * @param height
+     */
+    public void resize(float width, float height) {
+        this.width = width;
+        this.height = height;
+    }
+
+    /**
+     * Re-scales the image by a given percent
+     *
+     * @param scaleX the percent to rescale to in the x direction
+     * @param scaleY the percent to rescale to in the y direction
+     */
+    public void rescale(float scaleX, float scaleY) {
+        width *= scaleX;
+        height *= scaleY;
+    }
+
     @Override
     public void render(Graphics g, float offsetX, float offsetY) {
-        graphic.render(g, (int) (worldX + offsetX), (int) (worldY + offsetY));
+        g.drawImage(super.getImage(), (int) (worldX + offsetX), (int) (worldY + offsetY), (int) width, (int) height, null);
     }
 
     @Override
     public String toString() {
-        return graphic.toString() + '@' + worldX + ',' + worldY;
+        return super.toString() + '@' + worldX + ',' + worldY;
     }
 }
