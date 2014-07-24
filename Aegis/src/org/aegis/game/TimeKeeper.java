@@ -163,7 +163,7 @@ public class TimeKeeper implements java.lang.Runnable {
     // - end
     // - lockFramerate
     // - unlockFramerate
-    // - setNanoTimeout
+    // - useNanoTimeout
     // - isPaused
     // - isRunning
     // TODO rewrite requestPause and requestUnpause methods
@@ -218,7 +218,7 @@ public class TimeKeeper implements java.lang.Runnable {
      *
      * @param on true in order to wait for nanosecond precision, false otherwise
      */
-    public void setNanoTimeout(boolean on) {
+    public void useNanoTimeout(boolean on) {
         this.waitNanos = on;
     }
 
@@ -263,23 +263,21 @@ public class TimeKeeper implements java.lang.Runnable {
 
         // GET THE DELTA TIME AND FIND THE WAIT TIME
         long stopTime = System.nanoTime();
-        long delta = targetNanos - (stopTime - startTime); // TOTAL IN NANOSECONDS
-        long currentTime = stopTime;
+        long delta = targetNanos - (stopTime - startTime); // TOTAL IN NANOSECONDS, SUBTRACT 500000 FOR ROUNDING 
 
         // SLEEP FOR SOME AMOUNT OF TIME IF NEEDED
         if (delta > 0 && !unlockedFramerate) {
             try {
-                Thread.sleep((delta + 500000) / 1000000);
+                // Thread.sleep((delta + 500000) / 1000000);
+                Thread.sleep(delta / 1000000);
 
                 // THIS PART IS CPU HEAVY BUT RELATIVELY SHORT COMPARED TO THE LONGER SLEEP
                 if (waitNanos) {
-                    while (currentTime <= stopTime + (delta % 1000000)) {
-                        // DO NOTHING \o/
+                    long endTime = targetNanos + startTime;
+                    while (System.nanoTime() < endTime) {
                         Thread.yield();
-                        currentTime = System.nanoTime();
                     }
                 }
-
                 // JUST DO A SIMPLE LOOP FOR THE NANOSECONDS
             } catch (InterruptedException ex) {
             }

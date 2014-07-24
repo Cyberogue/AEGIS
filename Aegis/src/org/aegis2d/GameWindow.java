@@ -63,8 +63,6 @@ public class GameWindow extends JFrame {
 
         setSize(width, height);
         setDefaultCloseOperation(GameWindow.EXIT_ON_CLOSE);
-
-        setVisible(true);
     }
 
     /**

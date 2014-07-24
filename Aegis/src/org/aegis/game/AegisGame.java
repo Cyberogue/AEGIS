@@ -130,7 +130,11 @@ public class AegisGame implements java.lang.Runnable {
         if (input == null) {
             throw new SystemMissingException("The game's input monitoring system has not yet been initialized");
         }
+        if (scenemanager.size() <= 0) {
+            throw new SystemMissingException("The game requires at least one scene to run");
+        }
         timer.start();
+        graphics.getWindow().setVisible(true);
     }
 
     @Override

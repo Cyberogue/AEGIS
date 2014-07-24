@@ -125,6 +125,15 @@ public class GameSceneManager implements RuntimeSystem {
     }
 
     /**
+     * Returns the number of loaded scenes in the game
+     *
+     * @return the number of loaded scenes in the game
+     */
+    public int size() {
+        return scenes.size();
+    }
+
+    /**
      * Forces the next GameScene on the next frame, starting at the
      * initialization method (Which defaults to the standard update method
      * unless it is overwritten)

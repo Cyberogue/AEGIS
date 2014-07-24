@@ -35,7 +35,7 @@ import org.aegis.ui.RenderList;
 
 /**
  * Class which contains the game's main addToRender lists and uses a Swing
- implementation for its primary addToRendering capabilities
+ * implementation for its primary addToRendering capabilities
  *
  * @author Rogue <Alice Q.>
  */
@@ -87,8 +87,8 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
     }
 
     /**
-     * Method to set the background RenderItem. This is the first item addToRendered
- on-screen and should represent the background.
+     * Method to set the background RenderItem. This is the first item
+     * addToRendered on-screen and should represent the background.
      *
      * @param bgColor the background color behind the item
      * @param bgDecal the RenderItem to use as the background
@@ -108,10 +108,11 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
     }
 
     /**
-     * Renders everything contained in the game and GUI addToRender lists, as well as
- the background. The GUI addToRender list is always addToRendered on top of the game
- addToRender list. Please note that this removes the item from the addToRender
- lists, so a persistent item must be re-added every frame
+     * Renders everything contained in the game and GUI addToRender lists, as
+     * well as the background. The GUI addToRender list is always addToRendered
+     * on top of the game addToRender list. Please note that this removes the
+     * item from the addToRender lists, so a persistent item must be re-added
+     * every frame
      */
     @Override
     public final void update() {
@@ -119,7 +120,7 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
             gameWindow.repaint();
         }
     }
-
+    
     @Override
     public final synchronized void paintComponent(Graphics g) {
         if (background != null) {
