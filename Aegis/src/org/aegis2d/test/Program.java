@@ -42,8 +42,7 @@ public class Program {
 
     public static void main(String[] args) {
         AegisGame game = new Aegis2DGame("My Game", 1024, 768, 60.0f);
-        game.getTimeKeeper().useNanoTimeout(false);
-        
+
         GameScene debugScene = new TestScene(game, "DEBUG");
         game.getScenes().addScene(debugScene);
         game.getGraphics().setBackground(Color.white, null);
