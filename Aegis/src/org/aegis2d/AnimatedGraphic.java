@@ -194,6 +194,30 @@ public class AnimatedGraphic implements RenderItem {
     }
 
     /**
+     * Loads the entirety of a spritesheet and adds it as an animation sequence
+     * to the end of its current animation, starting from the top left and going
+     * sequentially left to right, and top to bottom
+     *
+     * @param spritesheet the spritesheet to break apart
+     * @param width the width of each tile
+     * @param height the height of each tile
+     * @param spacing the amount of space between each tile. This is the number
+     * of pixels between two respective tiles.
+     * @param border the total border around the image. This is the distance
+     * between the edge of the image and the edge of the closest tile.
+     * @param duration the duration (in game frames) between each frame of the
+     * animation
+     * @return the total number of frames added
+     */
+    public int loadFromSpritesheet(BufferedImage spritesheet, int width, int height, int spacing, int border, int duration) {
+        Collection<BufferedImage> subimages = getFromSpritesheet(spritesheet, width, height, spacing, border);
+        for (BufferedImage image : subimages) {
+            frames.add(new Frame(image, duration));
+        }
+        return subimages.size();
+    }
+
+    /**
      * Method to break apart a spritesheet into its separate tiles
      *
      * @param spritesheet the spritesheet to break apart

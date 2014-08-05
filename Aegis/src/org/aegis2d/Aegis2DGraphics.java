@@ -101,7 +101,7 @@ public class Aegis2DGraphics extends JPanel implements GameGraphics {
      *
      * @param item the RenderItem to add
      */
-    public synchronized void addToRender(RenderItem item) {
+    public synchronized void addToRenderList(RenderItem item) {
         renderlist.add(item);
     }
 

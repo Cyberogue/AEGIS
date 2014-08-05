@@ -54,25 +54,16 @@ public class TestScene extends org.aegis.game.GameScene {
             item = new Sprite2D();
 
             AnimatedGraphic ag = new AnimatedGraphic();
+            ag.loadFromSpritesheet(ImageIO.read(new File(".\\img\\BlueTimerSheet.png")), 64, 64, 1, 2, 0);
             item.addState(ag);
-            for (BufferedImage image : AnimatedGraphic.getFromSpritesheet(
-                    ImageIO.read(new File(".\\img\\BlueTimerSheet.png")), 64, 64, 1, 2)) {
-                ag.addFrame(image, 0);
-            }
 
             ag = new AnimatedGraphic();
+            ag.loadFromSpritesheet(ImageIO.read(new File(".\\img\\GreenTimerSheet.png")), 64, 64, 1, 2, 5);
             item.addState(ag);
-            for (BufferedImage image : AnimatedGraphic.getFromSpritesheet(
-                    ImageIO.read(new File(".\\img\\RedTimerSheet.png")), 64, 64, 1, 2)) {
-                ag.addFrame(image, 0);
-            }
 
             ag = new AnimatedGraphic();
+            ag.loadFromSpritesheet(ImageIO.read(new File(".\\img\\RedTimerSheet.png")), 64, 64, 1, 2, 10);
             item.addState(ag);
-            for (BufferedImage image : AnimatedGraphic.getFromSpritesheet(
-                    ImageIO.read(new File(".\\img\\GreenTimerSheet.png")), 64, 64, 1, 2)) {
-                ag.addFrame(image, 0);
-            }
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -133,6 +124,6 @@ public class TestScene extends org.aegis.game.GameScene {
         // PRINT A MESSAGE OR SOMETHING
         System.out.println(this + "\t" + game.getTimeKeeper());
 
-        game.getGraphics().addToRender(item);
+        game.getGraphics().addToRenderList(item);
     }
 }
