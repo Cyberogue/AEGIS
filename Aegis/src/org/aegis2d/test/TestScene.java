@@ -28,16 +28,10 @@ import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import javax.imageio.ImageIO;
 import org.aegis.game.AegisGame;
-import org.aegis.ui.FixedRenderItem;
-import org.aegis2d.Decal;
-import org.aegis.ui.LayerStack;
-import org.aegis.ui.RenderItem;
-import org.aegis.ui.RenderList;
 import org.aegis2d.AnimatedGraphic;
-import org.aegis2d.DynamicDecal;
+import org.aegis2d.Sprite2D;
 
 /**
  * Simple scene used for running test cases and nothing else
@@ -52,15 +46,32 @@ public class TestScene extends org.aegis.game.GameScene {
         super(game, sceneID);
     }
 
-    private AnimatedGraphic item;
+    private Sprite2D item;
 
     @Override
     public void onSceneEnter() {
         try {
-            item = new AnimatedGraphic();
+            item = new Sprite2D();
+
+            AnimatedGraphic ag = new AnimatedGraphic();
+            item.addState(ag);
             for (BufferedImage image : AnimatedGraphic.getFromSpritesheet(
-                    ImageIO.read(new File(".\\img\\AnimButtonSheet.png")), 64, 64, 1, 2)) {
-                item.addFrame(image, 0);
+                    ImageIO.read(new File(".\\img\\BlueTimerSheet.png")), 64, 64, 1, 2)) {
+                ag.addFrame(image, 0);
+            }
+
+            ag = new AnimatedGraphic();
+            item.addState(ag);
+            for (BufferedImage image : AnimatedGraphic.getFromSpritesheet(
+                    ImageIO.read(new File(".\\img\\RedTimerSheet.png")), 64, 64, 1, 2)) {
+                ag.addFrame(image, 0);
+            }
+
+            ag = new AnimatedGraphic();
+            item.addState(ag);
+            for (BufferedImage image : AnimatedGraphic.getFromSpritesheet(
+                    ImageIO.read(new File(".\\img\\GreenTimerSheet.png")), 64, 64, 1, 2)) {
+                ag.addFrame(image, 0);
             }
         } catch (IOException ex) {
             ex.printStackTrace();
@@ -72,6 +83,35 @@ public class TestScene extends org.aegis.game.GameScene {
                 switch (event.getKeyCode()) {
                     case KeyEvent.VK_SPACE:
                         item.pause(!item.isPaused());
+                        break;
+                    case KeyEvent.VK_1:
+                        int frame = item.getCurrentAnimation().getCurrentFrame();
+                        item.setCurrentAnimation(0);
+                        item.getCurrentAnimation().goToFrame(frame);
+                        break;
+                    case KeyEvent.VK_2:
+                        frame = item.getCurrentAnimation().getCurrentFrame();
+                        item.setCurrentAnimation(1);
+                        item.getCurrentAnimation().goToFrame(frame);
+                        break;
+                    case KeyEvent.VK_3:
+                        frame = item.getCurrentAnimation().getCurrentFrame();
+                        item.setCurrentAnimation(2);
+                        item.getCurrentAnimation().goToFrame(frame);
+                        break;
+                    case KeyEvent.VK_W:
+                        item.setWorldY(item.getWorldY() - 5);
+                        break;
+                    case KeyEvent.VK_A:
+                        item.setWorldX(item.getWorldX() - 5);
+                        break;
+                    case KeyEvent.VK_S:
+                        item.setWorldY(item.getWorldY() + 5);
+                        break;
+                    case KeyEvent.VK_D:
+                        item.setWorldX(item.getWorldX() + 5);
+                        break;
+                    default:
                         break;
                 }
             }

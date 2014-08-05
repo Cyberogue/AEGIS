@@ -46,16 +46,12 @@ public class AnimatedGraphic implements RenderItem {
     // ARRAYLIST CONTAINING ALL THE FRAMES TO RENDER
     private ArrayList<Frame> frames;
 
-    // USED TO PAUSE THE ANIMATION
-    private boolean running;
-
     /**
      * Default constructor for an empty AnimatedDecal
      */
     public AnimatedGraphic() {
         this.frameNum = 0;
         this.timer = 0;
-        this.running = true;
         this.frames = new ArrayList();
     }
 
@@ -108,16 +104,6 @@ public class AnimatedGraphic implements RenderItem {
     }
 
     /**
-     * Method used to pause the animation
-     *
-     * @param on true in order to pause the animation, false to resume the
-     * animation running where it left off
-     */
-    public void pause(boolean on) {
-        running = !on;
-    }
-
-    /**
      * Method to retrieve a collection of all the frames in the animation
      *
      * @return a collection of all the frames in the animation
@@ -136,28 +122,54 @@ public class AnimatedGraphic implements RenderItem {
     }
 
     /**
-     * Returns true if the animation is paused, false otherwise
+     * Returns the current frame the animation is on
      *
-     * @return true if the animation is paused, false otherwise
+     * @return the current frame the animation is on
      */
-    public boolean isPaused() {
-        return !running;
+    public int getCurrentFrame() {
+        return frameNum;
+    }
+
+    /**
+     * Forces the animation to go to the specified frame
+     *
+     * @param frameNum the frame number to go to
+     * @throws IndexOutOfBoundsException if the specified index is outside the
+     * valid range
+     */
+    public void goToFrame(int frameNum) {
+        if (frameNum < 0 || frameNum >= frames.size()) {
+            throw new IndexOutOfBoundsException();
+        }
+        this.frameNum = frameNum;
+    }
+
+    /**
+     * Updates the current frame, setting it to the next frame in the sequence
+     * if appropriate
+     */
+    public void update() {
+        if (timer >= frames.get(frameNum).duration) {
+            timer = 0;
+            if (++frameNum >= frames.size()) {
+                frameNum = 0;
+            }
+        } else {
+            timer++;
+        }
     }
 
     @Override
     public void render(Graphics g, float offsetX, float offsetY) {
-        Frame frame = frames.get(frameNum);
-        g.drawImage(frame.image, (int) offsetX, (int) offsetY, null);
-        if (running) {
-            if (timer >= frame.duration) {
-                timer = 0;
-                if (++frameNum >= frames.size()) {
-                    frameNum = 0;
-                }
-            } else {
-                timer++;
-            }
-        }
+        g.drawImage(frames.get(frameNum).image, (int) offsetX, (int) offsetY, null);
+    }
+
+    /**
+     * Resets the AnimatedGraphic to its initial position
+     */
+    public void reset() {
+        this.timer = 0;
+        this.frameNum = 0;
     }
 
     /**

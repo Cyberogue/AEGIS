@@ -197,6 +197,12 @@ public class DynamicDecal extends Decal {
     }
 
     @Override
+    public DynamicDecal getCopyOf() {
+        DynamicDecal decal = new DynamicDecal(getImage());
+        return decal;
+    }
+
+    @Override
     public void render(Graphics g, float offsetX, float offsetY) {
         g.drawImage(super.getImage(), (int) (worldX + offsetX), (int) (worldY + offsetY), (int) width, (int) height, null);
     }
