@@ -23,6 +23,8 @@
  */
 package org.aegis2d.test;
 
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -34,8 +36,8 @@ import org.aegis2d.Decal;
 import org.aegis.ui.LayerStack;
 import org.aegis.ui.RenderItem;
 import org.aegis.ui.RenderList;
-import org.aegis2d.AnimatedDecal;
-import org.aegis2d.Sprite2D;
+import org.aegis2d.AnimatedGraphic;
+import org.aegis2d.DynamicDecal;
 
 /**
  * Simple scene used for running test cases and nothing else
@@ -50,20 +52,40 @@ public class TestScene extends org.aegis.game.GameScene {
         super(game, sceneID);
     }
 
-    private RenderItem item;
+    private AnimatedGraphic item;
 
     @Override
     public void onSceneEnter() {
         try {
-            item = new AnimatedDecal();
-            for (BufferedImage image : AnimatedDecal.getFromSpritesheet(
+            item = new AnimatedGraphic();
+            for (BufferedImage image : AnimatedGraphic.getFromSpritesheet(
                     ImageIO.read(new File(".\\img\\AnimButtonSheet.png")), 64, 64, 1, 2)) {
-                ((AnimatedDecal) item).addFrame(image, 5);
+                item.addFrame(image, 0);
             }
-
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+
+        game.getGraphics().getWindow().addKeyListener(new KeyListener() {
+            @Override
+            public void keyReleased(KeyEvent event) {
+                switch (event.getKeyCode()) {
+                    case KeyEvent.VK_SPACE:
+                        item.pause(!item.isPaused());
+                        break;
+                }
+            }
+
+            @Override
+            public void keyPressed(KeyEvent event) {
+
+            }
+
+            @Override
+            public void keyTyped(KeyEvent event) {
+
+            }
+        });
     }
 
     @Override
@@ -72,6 +94,5 @@ public class TestScene extends org.aegis.game.GameScene {
         System.out.println(this + "\t" + game.getTimeKeeper());
 
         game.getGraphics().addToRender(item);
-
     }
 }

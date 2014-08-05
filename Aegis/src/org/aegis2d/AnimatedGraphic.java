@@ -35,7 +35,7 @@ import org.aegis.ui.RenderItem;
  *
  * @author Rogue <Alice Q>
  */
-public class AnimatedDecal implements RenderItem {
+public class AnimatedGraphic implements RenderItem {
 
     // THE CURRENT FRAME WE'RE ON
     private int frameNum;
@@ -52,7 +52,7 @@ public class AnimatedDecal implements RenderItem {
     /**
      * Default constructor for an empty AnimatedDecal
      */
-    public AnimatedDecal() {
+    public AnimatedGraphic() {
         this.frameNum = 0;
         this.timer = 0;
         this.running = true;
@@ -66,7 +66,7 @@ public class AnimatedDecal implements RenderItem {
      * @param frames a Collection of all the frames in the animation, each one
      * with its own image and duration
      */
-    public AnimatedDecal(Collection<Frame> frames) {
+    public AnimatedGraphic(Collection<Frame> frames) {
         this();
         this.frames.addAll(frames);
     }
