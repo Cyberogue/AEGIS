@@ -23,9 +23,6 @@
  */
 package org.aegis2d.test;
 
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
@@ -38,21 +35,21 @@ import org.aegis2d.Sprite2D;
  *
  * @author Rogue <Alice Q>
  */
-public class TestScene extends org.aegis.game.GameScene {
+public class TestScene extends org.aegis.game.AsyncGameScene {
 
     private final static java.util.Random rand = new java.util.Random();
 
     public TestScene(AegisGame game, String sceneID) {
         super(game, sceneID);
+        item = new Sprite2D();
     }
 
     private Sprite2D item;
 
     @Override
     public void onSceneEnter() {
+        super.onSceneEnter();
         try {
-            item = new Sprite2D();
-
             AnimatedGraphic ag = new AnimatedGraphic();
             ag.loadFromSpritesheet(ImageIO.read(new File(".\\img\\BlueTimerSheet.png")), 64, 64, 1, 2, 0);
             item.addState(ag);
@@ -67,56 +64,24 @@ public class TestScene extends org.aegis.game.GameScene {
         } catch (IOException ex) {
             ex.printStackTrace();
         }
+    }
 
-        game.getGraphics().getWindow().addKeyListener(new KeyListener() {
-            @Override
-            public void keyReleased(KeyEvent event) {
-                switch (event.getKeyCode()) {
-                    case KeyEvent.VK_SPACE:
-                        item.pause(!item.isPaused());
-                        break;
-                    case KeyEvent.VK_1:
-                        int frame = item.getCurrentAnimation().getCurrentFrame();
-                        item.setCurrentAnimation(0);
-                        item.getCurrentAnimation().goToFrame(frame);
-                        break;
-                    case KeyEvent.VK_2:
-                        frame = item.getCurrentAnimation().getCurrentFrame();
-                        item.setCurrentAnimation(1);
-                        item.getCurrentAnimation().goToFrame(frame);
-                        break;
-                    case KeyEvent.VK_3:
-                        frame = item.getCurrentAnimation().getCurrentFrame();
-                        item.setCurrentAnimation(2);
-                        item.getCurrentAnimation().goToFrame(frame);
-                        break;
-                    case KeyEvent.VK_W:
-                        item.setWorldY(item.getWorldY() - 5);
-                        break;
-                    case KeyEvent.VK_A:
-                        item.setWorldX(item.getWorldX() - 5);
-                        break;
-                    case KeyEvent.VK_S:
-                        item.setWorldY(item.getWorldY() + 5);
-                        break;
-                    case KeyEvent.VK_D:
-                        item.setWorldX(item.getWorldX() + 5);
-                        break;
-                    default:
-                        break;
-                }
+    @Override
+    public void run() {
+        try {
+            while (true) {
+                Thread.sleep(1000);
+                item.setCurrentAnimation(1);
+
+                Thread.sleep(1000);
+                item.setCurrentAnimation(2);
+
+                Thread.sleep(1000);
+                item.setCurrentAnimation(0);
             }
+        } catch (InterruptedException e) {
 
-            @Override
-            public void keyPressed(KeyEvent event) {
-
-            }
-
-            @Override
-            public void keyTyped(KeyEvent event) {
-
-            }
-        });
+        }
     }
 
     @Override

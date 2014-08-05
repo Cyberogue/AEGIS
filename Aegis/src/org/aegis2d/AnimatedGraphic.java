@@ -146,7 +146,10 @@ public class AnimatedGraphic implements RenderItem {
 
     /**
      * Updates the current frame, setting it to the next frame in the sequence
-     * if appropriate
+     * if appropriate.
+     *
+     * This method can be overwritten to perform custom animations, such as
+     * custom loops and loop termination
      */
     public void update() {
         if (timer >= frames.get(frameNum).duration) {
