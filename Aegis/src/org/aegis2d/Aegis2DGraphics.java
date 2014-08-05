@@ -27,8 +27,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import org.aegis.game.AegisGame;
-import org.aegis.game.RuntimeSystem;
 import org.aegis.ui.GameGraphics;
 import org.aegis.ui.RenderItem;
 import org.aegis.ui.RenderList;

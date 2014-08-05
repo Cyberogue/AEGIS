@@ -23,14 +23,18 @@
  */
 package org.aegis2d.test;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import javax.imageio.ImageIO;
 import org.aegis.game.AegisGame;
 import org.aegis.ui.FixedRenderItem;
 import org.aegis2d.Decal;
 import org.aegis.ui.LayerStack;
 import org.aegis.ui.RenderItem;
 import org.aegis.ui.RenderList;
+import org.aegis2d.AnimatedDecal;
 import org.aegis2d.Sprite2D;
 
 /**
@@ -47,43 +51,16 @@ public class TestScene extends org.aegis.game.GameScene {
     }
 
     private RenderItem item;
-    private RenderList list;
-    private LayerStack stack;
-    private Sprite2D sprite;
-
-    private int direction;
-    private float vY;
 
     @Override
     public void onSceneEnter() {
         try {
-            // DECALS ARE EXTENSIONS OF BUFFEREDIMAGES SUITED FOR USE WITH AEGIS
-            Decal helloTile = new Decal(new File(".\\img\\HelloWorld.png"));
-            Decal blueTile = new Decal(new File(".\\img\\BlueBUtton.png"));
-
-            // A SIMPLE RENDER ITEM 
-            item = new FixedRenderItem(blueTile, 50, 100);
-
-            // A RENDER LIST
-            list = new RenderList();
-            for (int i = 0; i < 3; i++) {
-                list.add(new FixedRenderItem(blueTile, 50 + i * 50, 200 + i * 10));
-                list.add(new FixedRenderItem(helloTile, 75 + i * 50, 205 + i * 10));
+            item = new AnimatedDecal();
+            for (BufferedImage image : AnimatedDecal.getFromSpritesheet(
+                    ImageIO.read(new File(".\\img\\AnimButtonSheet.png")), 64, 64, 1, 2)) {
+                ((AnimatedDecal) item).addFrame(image, 5);
             }
 
-            // A LAYER STACK
-            stack = new LayerStack(3);
-            for (int i = 0; i < 5; i++) {
-                stack.addToLayer(0, new FixedRenderItem(blueTile, 50 + i * 50, 300 + i * 5));
-                stack.addToLayer(1, new FixedRenderItem(helloTile, 75 + i * 50, 325 + i * 5));
-                stack.addToLayer(2, new FixedRenderItem(blueTile, 100 + i * 50, 350 + i * 5));
-            }
-
-            // AND A SIMPLE SPRITE
-            sprite = new Sprite2D(helloTile, 250, 500);
-            stack.addToLayer(1, sprite);
-            direction = 1; // SIMPLE BOUNCING CODE
-            vY = 1;
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -94,24 +71,7 @@ public class TestScene extends org.aegis.game.GameScene {
         // PRINT A MESSAGE OR SOMETHING
         System.out.println(this + "\t" + game.getTimeKeeper());
 
-        // GRAPHICS ARE ALWAYS RENDERED AFTER THE GAME CODE SO TING ISN'T MUCH OF AN ISSIE, BUT DOES ESTABLISH RENDER ORDER
         game.getGraphics().addToRender(item);
-        game.getGraphics().addToRender(list);
-        game.getGraphics().addToRender(stack);
 
-        // SIMPLE BOUNCING CODE
-        if (sprite.x() > 1024 - sprite.getWidth()) {
-            direction = -1;
-        } else if (sprite.x() < 0) {
-            direction = 1;
-        }
-        vY += 1;
-        if (sprite.y() > 768 - sprite.getHeight() - vY) {
-            vY = -10 + rand.nextFloat() * -30;
-        }
-        float scale = .2f + .8f * 2 * sprite.y() / game.getGraphics().getHeight();
-        sprite.resize(scale * 64, scale * 64);
-        sprite.move(direction * 5 * game.getTimeKeeper().getPerformance(), vY);
-        // NO NEED TO RENDER THE SPRITE SINCE IT'S PART OF THE STACK
     }
 }

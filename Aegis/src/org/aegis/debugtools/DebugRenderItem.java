@@ -21,7 +21,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.aegis2d.test;
+package org.aegis.debugtools;
 
 import java.awt.Color;
 import java.awt.Graphics;

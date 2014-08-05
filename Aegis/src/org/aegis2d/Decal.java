@@ -33,7 +33,8 @@ import javax.imageio.ImageIO;
 /**
  * Immutable wrapper class for a BufferedImage allowing for RenderItem
  * capabilities, which can be used to reduce memory usage by using single
- * instances across multiple resources
+ * instances across multiple resources. This is intended as the most basic
+ * RenderItem possible in the game.
  *
  * @author Rogue <Alice Q.>
  */
@@ -87,6 +88,18 @@ public class Decal implements RenderItem {
      */
     public int getHeight() {
         return image.getHeight();
+    }
+
+    /**
+     * Method to clone an existing Decal wrapper but not the actual image.
+     * Please note that both instances will contain the same image
+     * representation, so changes to one may affect the other.
+     *
+     * @return a new Decal item wrapping the same image
+     */
+    public Decal getCopyOf() {
+        Decal decal = new Decal(image);
+        return decal;
     }
 
     @Override
