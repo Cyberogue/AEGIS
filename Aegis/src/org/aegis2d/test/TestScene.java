@@ -27,6 +27,7 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import org.aegis.game.AegisGame;
+import org.aegis.math.*;
 import org.aegis2d.AnimatedGraphic;
 import org.aegis2d.Sprite2D;
 
@@ -49,6 +50,22 @@ public class TestScene extends org.aegis.game.AsyncGameScene {
     @Override
     public void onSceneEnter() {
         super.onSceneEnter();
+        
+        Vector2 v2 = Vector2.ONE;
+        System.out.println(v2);
+        System.out.println(v2.add(Vector2.ONE));
+        System.out.println(v2.subtract(0.5f, 0.25f));
+        System.out.println(v2.multiply(5f, 5f));
+        System.out.println(v2.divide(0.5f, 0.25f));
+        System.out.println(v2.normalized());
+        System.out.println(v2.magnitude());
+        System.out.println(v2.angle() * 180/Math.PI);
+        System.out.println(new Vector2(5.0f, 2.0f).normalized());
+        System.out.println(v2.normalized().dot(new Vector2(5.0f, 2.0f).normalized()));
+        
+        
+        
+        
         try {
             AnimatedGraphic ag = new AnimatedGraphic();
             ag.loadFromSpritesheet(ImageIO.read(new File(".\\img\\BlueTimerSheet.png")), 64, 64, 1, 2, 0);
@@ -87,7 +104,7 @@ public class TestScene extends org.aegis.game.AsyncGameScene {
     @Override
     public void update() {
         // PRINT A MESSAGE OR SOMETHING
-        System.out.println(this + "\t" + game.getTimeKeeper());
+//        System.out.println(this + "\t" + game.getTimeKeeper());
 
         game.getGraphics().addToRenderList(item);
     }
