@@ -1,4 +1,4 @@
-/*
+    /*
  * The MIT License
  *
  * Copyright 2014 Rogue <Alice Q.>.
@@ -267,7 +267,7 @@ public class Vector2 {
         if (x > 1.0f || x < -1.0f || y > 1.0f || y < -1.0f) {    // Fast check
             return false;
         }
-        return (this.magnitude() == 1.0f);
+        return ((x*x + y*y) == 1.0f);   // Sqrt(1) = 1, no need to take sqrt
     }
 
     /**

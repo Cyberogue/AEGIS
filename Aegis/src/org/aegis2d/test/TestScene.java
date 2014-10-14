@@ -51,20 +51,6 @@ public class TestScene extends org.aegis.game.AsyncGameScene {
     public void onSceneEnter() {
         super.onSceneEnter();
 
-        Vector2 v = new Vector2((float) Math.PI, (float) Math.E);
-        Vector2 v_n = v.normalize();
-        Vector2 v_fn = v.fastNormalize();
-        System.out.println("V:\t" + v);
-        System.out.println("N:\t" + v_n);
-        System.out.println("FN:\t" + v_fn);
-        System.out.println("N:\t" + v_n.magnitude());
-        System.out.println("FN:\t" + v_fn.magnitude());
-        System.out.println("V:\t" + v.isNormalized());
-        System.out.println("N:\t" + v_n.isNormalized());
-        System.out.println("FN:\t" + v_fn.isNormalized());
-        System.out.println("0:\t" + Vector2.ZERO.isZero());
-        System.out.println("dot:\t" + v_fn.dot(new Vector2(1f, 0f)));
-
         try {
             AnimatedGraphic ag = new AnimatedGraphic();
             ag.loadFromSpritesheet(ImageIO.read(new File(".\\img\\BlueTimerSheet.png")), 64, 64, 1, 2, 0);
